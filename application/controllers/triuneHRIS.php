@@ -12,9 +12,10 @@ class triuneHRIS extends MY_Controller {
 	 * config/routes.php, it's displayed at http://tua.edu.ph/triune
 	 *
 	 * AUTHOR: Randy D. Lagdaan
+	 * EDIT: Sidney Pascasio
 	 * DESCRIPTION: JRS Controller.  
 	 * DATE CREATED: April 21, 2018
-     * DATE UPDATED: May 14, 2018
+     * DATE UPDATED: December 11, 2018
 	 */
 
     function __construct() {
