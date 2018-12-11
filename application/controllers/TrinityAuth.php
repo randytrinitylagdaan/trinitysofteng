@@ -16,8 +16,10 @@ class trinityAuth extends MY_Controller {
 	 * DATE CREATED: May 25, 2018
      * DATE UPDATED: May 28, 2018
 	 */
-
+     
+ 	 //this function loads data from library and sets status/roles with error delimiters
     function __construct() {
+        
         parent::__construct();
 		$this->load->library('session');
         $this->load->library('form_validation'); 
@@ -28,7 +30,7 @@ class trinityAuth extends MY_Controller {
 	}//function __construct()
 
 
-
+//this Fuction  loads the signin view with database ready and has a function that destroys header
 	public function signInView()	{
 		
 		//$this->session->sess_destroy();
@@ -41,7 +43,7 @@ class trinityAuth extends MY_Controller {
         $fieldName = null, $where = null, $join = null, $joinType = null, $sortBy = null, 
         $sortOrder = null, $limit = null, $fieldNameLike = null, $like = null, 
         $whereSpecial = null, $groupBy = null );
-
+ -
         foreach($results[0] as $key=>$val){
             $this->session->set_userdata($key, $val);
         }
@@ -53,6 +55,8 @@ class trinityAuth extends MY_Controller {
         $this->load->view('useraccount/footer', $data);
 
 	}
+
+//this function controls the functions of sign in view, it has conditions that the user must provide to be able to log in    
 
 	public function loginControl() 	{
 		$this->form_validation->set_rules('userName', 'User Name', 'required');    
@@ -120,7 +124,7 @@ class trinityAuth extends MY_Controller {
 	}
 
 
-
+//this function loads sign up / registration view 
 	public function signUpView() 	{
 		header("Access-Control-Allow-Origin: *");
         $data = array();
@@ -130,7 +134,7 @@ class trinityAuth extends MY_Controller {
 		//$this->load->view('useraccount/footer', $data);
 	}
 
-
+//this function gets the username input and gets records from database, if it exists it will output true and on the other hand false
 	public function checkUserName() {
 		if(!empty($_POST["userName"])) {
 			$userName = $_POST["userName"];
@@ -148,11 +152,15 @@ class trinityAuth extends MY_Controller {
 	}
 
 
+
+//this function handles create account form that has validation for input purposes and has a if else condition if the account exists, it assigns the input data and 
+stores it into the database and sends a verification to email
+
 	public function createAccount() {
 		$this->form_validation->set_rules('userName', 'User Name', 'required|alpha_numeric');
 		$this->form_validation->set_rules('emailAddress', 'Email Address', 'required|valid_email');  
 		$this->form_validation->set_rules('lastName', 'Last Name', 'required');    
-		$this->form_validation->set_rules('firstName', 'First Name', 'required');    
+		$this->form_validation->set_rules('firstName', 'First Name', 'required'z-);    
 		$this->form_validation->set_rules('middleName', 'Middle Name', 'required');    
 		$this->form_validation->set_rules('birthDate', 'Birth Date', 'required|regex_match[/\d{4}\-\d{2}-\d{2}/]');    
 		$this->form_validation->set_rules('userCategory', 'User Category', 'required');    
@@ -374,7 +382,7 @@ class trinityAuth extends MY_Controller {
 
 	}
 
-
+//this function loads the forgotrpassword form that has conditions if the input email exists and updates the password
 	public function forgotPassword() {
 		$this->form_validation->set_rules('emailAddress', 'Email Address', 'required|valid_email'); 
 		
@@ -438,6 +446,8 @@ class trinityAuth extends MY_Controller {
 		
 	}
 
+
+//this function starts a session after log in success, updates different tables on database that has conditions and gives initial rights to a new account and redirects the user to sign up success view.
 
 	public function complete() {
 		$token = $this->_base64urlDecode($this->uri->segment(4));       
@@ -932,6 +942,8 @@ class trinityAuth extends MY_Controller {
 	}
 
     
+
+//this function is the sign up success view function that loads the data from array
 	public function signUpSuccess() 	{
         header("Access-Control-Allow-Origin: *");
         $data = array();
@@ -942,7 +954,8 @@ class trinityAuth extends MY_Controller {
 		$this->load->view('useraccount/footer', $data);
 	}
 
- 
+
+// this function validates the password after a valid token, then updates the database with conditions then loads the session flashdata that shows a successful msg 
 	public function resetPassword()
 	{
 		$token = $this->_base64urlDecode($this->uri->segment(4));         
@@ -1016,7 +1029,9 @@ class trinityAuth extends MY_Controller {
 
 		}
 	} 
-    
+
+
+//this function loads the data "student consent form"     
 	public function consentFormStudent() 	{ 
 		header("Access-Control-Allow-Origin: *");
         $data = array();
@@ -1026,7 +1041,8 @@ class trinityAuth extends MY_Controller {
 		$this->load->view('useraccount/footer', $data);
 	}
 
-	
+
+//this function loads the form data consent for employee	
 	public function consentFormEmployee() 	{ 
 		header("Access-Control-Allow-Origin: *");
         $data = array();
@@ -1036,8 +1052,9 @@ class trinityAuth extends MY_Controller {
 		$this->load->view('useraccount/footer', $data);
 	}
 
+
+//this function destroys the session and redirects to sign in view path
 	public function logout() {
 		$this->session->sess_destroy();
 		redirect('trinityAuth/signInView');
 	}	
-}

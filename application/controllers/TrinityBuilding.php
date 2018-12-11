@@ -17,16 +17,21 @@ class trinityBuilding extends MY_Controller {
      * DATE UPDATED: June 04, 2018
 	 */
 
+	 
+	//This function calls construct function from parent then loads 'session from library
     function __construct() {
         parent::__construct();
 		$this->load->library('session');
     }//function __construct()
 
+	//This function loads request create form from routes that views the details.
     public function tBAMIMSCreateRequest() {
         //echo "HELLO WORLD";
         $this->load->view('TBAMIMS/request-create-form');
     }
 
+	
+	//function that uses post method that POST data / variables when it called by codes. then it will be loaded then view with data thru routes 
     public function tBAMIMSCreateRequestConfirmation() {
 		$data['locationCode'] = $_POST["locationCode"];
 		$data['floor'] = $_POST["floor"];
@@ -38,17 +43,22 @@ class trinityBuilding extends MY_Controller {
 		$this->load->view('TBAMIMS/request-create-confirmation', $data);
     }
 
+	//This function uses POST method POST data from previous form then loads to view the data when this function is called 
     public function tBAMIMSCreatedRequest() {
 		$data['ID'] = $_POST["ID"];
-        $this->load->view('TBAMIMS/request-created-details', $data);
+        $this->load->view('TBAMIMS/request-created-de tails', $data);
     }
 
+	//This function loads and views request-my-list function thru routes when this function is called
 	public function tBAMIMSMyRequestList() {
         $this->load->view('TBAMIMS/request-my-list');
 	}
 
 
-	
+	//This function post id data that has a boolean condition, gets data from triune job request table then stores to variable arrays then has conditions to verify 
+	//location item data, then after the conditions are meet it will get another data with different tables on the database 
+	// another different conditions are needed to meet depends on what result the request gets
+	//in short this function gets records from database depends on the conditions of request then loads after to request verification 
 	public function tBAMIMSRequestVerification() {
 
 		$data['ID'] = $_POST["ID"];
@@ -326,6 +336,10 @@ class trinityBuilding extends MY_Controller {
 
 		$this->load->view('TBAMIMS/request-verification', $data);
 	}
+	
+	
+	//This function gets data from previous form and sets a username variable, then gets the records on triune_privilege 
+	//declares array for another conditions. then loads the data to request list
 
 	public function tBAMIMSRequestList() {
 
@@ -391,6 +405,8 @@ class trinityBuilding extends MY_Controller {
         $this->load->view('TBAMIMS/request-list', $data);
 	}
 
+	
+	//This function get ctr data to get records from database triune job request table, sets data using foreach then loads materials autocomplete with data
     public function tBAMIMSMaterialsList() {
 		$data['ctr'] = $_GET["ctr"];
 		//echo $data['ctr'];
@@ -418,6 +434,8 @@ class trinityBuilding extends MY_Controller {
 
 
 	
+	// This function gets ctr data and gets records particulars units and ID from triune job request table, sorts by particulars order array asc.
+	//results will go to a condition foreach then store it as rec and then loads matierials autocomplete with price with the data 
     public function tBAMIMSMaterialsListWithPrice() {
 		$data['ctr'] = $_GET["ctr"];
 		//echo $data['ctr'];
@@ -444,7 +462,8 @@ class trinityBuilding extends MY_Controller {
     }
 	
 	
-	
+	//This function gets statusdescription and ID records from triune job request status table where $data array condition sorted by statusdescription using asc order
+	//the same with the above function it will be test thru foreach and then loads to request status autocomplete with data
     public function tBAMIMSRequestStatuList() {
 		$data['unitCode'] = $_GET["unitCode"];
 		$data['userNumber'] = $_GET["userNumber"];
@@ -472,7 +491,9 @@ class trinityBuilding extends MY_Controller {
 		$this->load->view('TBAMIMS/request-status-autocomplete', $data);
     }
 
-
+	//This function getS data from previous forms and sets a variable to null
+	//gets a record from triune job request table with a fieldname array 'request number'
+	//it will pass to a conditions that will be depended what will it meet and then loads to job order work form with the data
     public function tBAMIMSWorkerList() {
 		$data['userNumber'] = $_GET["userNumber"];
 		$data['ID'] = $_GET["requestID"];
@@ -487,7 +508,7 @@ class trinityBuilding extends MY_Controller {
 		$data['completionDateTarget'] = null;
 		$data['jobOrderNumber'] = null;
 		
-		$data['days'] = null;
+		$data['days'] = null; 
 		$results1 = null;
 		$results2 = null;
 		$data['items'] = null;
@@ -578,7 +599,7 @@ class trinityBuilding extends MY_Controller {
     }
 
 
-
+	//Gets records from triune job request job order , set it to varibles as arrays and then loads view of job order created record with data
     public function tBAMIMSWorkerListExist() {
 		$data['userNumber'] = $_GET["userNumber"];
 		$data['ID'] = $_GET["requestID"];
@@ -598,7 +619,8 @@ class trinityBuilding extends MY_Controller {
     }
 
 
-	
+	//This function gets data from previous forms and set it to a new storage $data[usernumber] for example, and gets data drom triune job request evaluation answers which 
+	//will be tested thru an if else statements and then loads to job order evaluation order with data
     public function tBAMIMSJobOrderEvaluation() {
 		$data['userNumber'] = $_GET["userNumber"];
 		$data['ID'] = $_GET["requestID"];
@@ -643,6 +665,9 @@ class trinityBuilding extends MY_Controller {
     }
 	
 	
+	
+	//This function gets records from database with two different conditions, first is the filetype images and second is the applications results will be 
+	//store into a new variables and loads it to request uploaded images list view
 	public function tBAMIMSShowUploadedFiles() {
 		
 
@@ -684,6 +709,29 @@ class trinityBuilding extends MY_Controller {
 	}
 
 	
+	
+	
+	
+	
+	
+	//half of the php file 
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	public function tBAMIMSDeleteUploadedFiles() {
 
 		$get = $this->input->get();  
@@ -692,7 +740,7 @@ class trinityBuilding extends MY_Controller {
 		$attachment = isset($clean['attachment']) ? $clean['attachment'] : '';
 		$userName = $this->_getUserName(1);
 
-		//DELETE PREVIOUS PENALTY RECORD
+		// This function delete previous penalty  Record
 		$where = array($attachment);
 		$fieldName = array('attachments');
 		$this->_deleteRecords('triune_job_request_transaction_tbamims_attachments', $fieldName, $where);
