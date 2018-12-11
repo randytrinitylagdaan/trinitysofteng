@@ -4,27 +4,27 @@
 }
 
 .theme-table {
-    border:1px solid black;
+    border:1px solid grey;
     table-layout: fixed;
     background:url(image/bg5.png)center center;
     background-size: cover;
-		border-spacing: 10px;
+		border-spacing: 15px;
 }
 
 .detail-table {
-    border: .5px solid grey;
+    border: .5px solid black;
 }
 
 img {
-	border:4px solid #003918;
-	width:150px;
-	height:150px;
-	margin: 5px;
+	border:6px solid #668874;
+	width:200px;
+	height:200px;
+	margin: 3px;
 }
 
 td {
-	padding: 4px;
-	font-size: 12px;
+	padding: 6px;
+	font-size: 9px;
 }
 
 td.sheet:nth-child(2) {
@@ -104,3 +104,4 @@ div#bottom-right {
     width: 50%;
     padding: 5px;
 }
+/*css code*/

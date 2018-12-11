@@ -24,7 +24,7 @@ class trinityDataRegistrar extends MY_Controller {
         $this->load->library('form_validation'); 
     }//function __construct()
 
-
+// The getAllStudentListREGISTRAR will get all post data from front end to make it usable in backend then clean all pages and rows last name, etc. then get all students with the specific lastname and firstname inside the triune_students then put it all in the result["total"] variable then sort it by last name and first name both in ascending order
     public function getAllStudentListREGISTRAR() {
 			
 		$post = $this->input->post();  
@@ -69,7 +69,7 @@ class trinityDataRegistrar extends MY_Controller {
 			echo json_encode($result);
     }
 
-
+// The getAllStudentListREGISTRAR will get all post data from front end to make it usable in backend then clean all pages and rows last name, etc. then get all students from k12 with the specific lastname and firstname inside the triune_students_k12 then put it all in the result["total"] variable then sort it by last name and first name both in ascending order
     public function getAllStudentK12ListREGISTRAR() {
 			
 		$post = $this->input->post();  
@@ -113,8 +113,5 @@ class trinityDataRegistrar extends MY_Controller {
 
 			echo json_encode($result);
     }
-	
-	
-	
-	
+		
 }
