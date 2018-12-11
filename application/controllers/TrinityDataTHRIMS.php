@@ -5,16 +5,17 @@ class trinityDataTHRIMS extends MY_Controller {
 
 	/**
 	 * Index Page for this controller.
-	 *
+	 *ss
 	 * Maps to the following URL
 	 * 		https://tua.edu.ph/triune/auth
 	 * Since this controller is set as the default controller in
 	 * config/routes.php, it's displayed at http://tua.edu.ph/triune
 	 *
 	 * AUTHOR: Randy D. Lagdaan
-	 * DESCRIPTION: THRIMS Data Controller. Included 
+	 * COMMENTS: Sidney James Y. Pascasio
+	 * DESCRIPTION: THRIMS Data Controller. Included
 	 * DATE CREATED: August 16, 2018
-     * DATE UPDATED: August 16, 2018
+     * DATE UPDATED: December 02, 2018
 	 */
 
 	var	$LOGFOLDER = 'thrims';
@@ -25,10 +26,10 @@ class trinityDataTHRIMS extends MY_Controller {
     }//function __construct()
 
     public function getAllEmployeeListTHRIMS() {
-			
-		$post = $this->input->post();  
+
+		$post = $this->input->post();
 		$clean = $this->security->xss_clean($post);
-		
+
 		$page = isset($clean['page']) ? intval($clean['page']) : 1;
 		$rows = isset($clean['rows']) ? intval($clean['rows']) : 10;
 		$lastName = isset($clean['lastName']) ? $clean['lastName'] : '';
@@ -36,35 +37,35 @@ class trinityDataTHRIMS extends MY_Controller {
 		$currentDepartment = isset($clean['currentDepartment']) ? $clean['currentDepartment'] : '';
 		$active = isset($clean['active']) ? $clean['active'] : '';
 
-		
+
 		$offset = ($page-1)*$rows;
 		$result = array();
 		$whereSpcl = "triune_employee_data.lastName like '$lastName%'";
 		$whereSpcl = $whereSpcl . " and triune_employee_data.firstName like '$firstName%'";
 		$whereSpcl = $whereSpcl . " and triune_employee_data.currentDepartment like '$currentDepartment%'";
 		$whereSpcl = $whereSpcl . " and triune_employee_data.active like '$active%'";
-	 
 
 
-		$results = $this->_getRecordsData($data = array('count(*) as totalRecs'), 
-			$tables = array('triune_employee_data'), $fieldName = null, $where = null, $join = null, $joinType = null, 
-			$sortBy = null, $sortOrder = null, $limit = null, 
-			$fieldNameLike = null, $like = null, 
+
+		$results = $this->_getRecordsData($data = array('count(*) as totalRecs'),
+			$tables = array('triune_employee_data'), $fieldName = null, $where = null, $join = null, $joinType = null,
+			$sortBy = null, $sortOrder = null, $limit = null,
+			$fieldNameLike = null, $like = null,
 			$whereSpecial = array($whereSpcl), $groupBy = null );
 
 			//$row = mysql_fetch_row($results);
 			$result["total"] = intval($results[0]->totalRecs);
 
-			$results = $this->_getRecordsData($data = array('*'), 
-			$tables = array('triune_employee_data'), 
-			$fieldName = null, $where = null, 
-			$join = null, 
-			$joinType =null, 
-			$sortBy = array('lastName', 'firstName'), $sortOrder = array('asc', 'asc'), 
-			$limit = array($rows, $offset), 
-			$fieldNameLike = null, $like = null, 
+			$results = $this->_getRecordsData($data = array('*'),
+			$tables = array('triune_employee_data'),
+			$fieldName = null, $where = null,
+			$join = null,
+			$joinType =null,
+			$sortBy = array('lastName', 'firstName'), $sortOrder = array('asc', 'asc'),
+			$limit = array($rows, $offset),
+			$fieldNameLike = null, $like = null,
 			$whereSpecial = array($whereSpcl), $groupBy = null );
-			
+
 			$result["rows"] = $results;
 
 			echo json_encode($result);
@@ -77,7 +78,7 @@ class trinityDataTHRIMS extends MY_Controller {
 		$fieldNm = $_POST["fieldName"];
 
 		$userName = $this->_getUserName(1);
-		
+
 			$systemForAuditName = "THRIMS";
 			$moduleName = "EMPLOYEEPROFILEUPDATE";
 
@@ -86,9 +87,9 @@ class trinityDataTHRIMS extends MY_Controller {
 				$recordUpdate = array(
 					$fieldNm => $value,
 				);
-			
-				$this->_updateRecords($tableName = 'triune_employee_data', 
-				$fieldName = array('employeeNumber'), 
+
+				$this->_updateRecords($tableName = 'triune_employee_data',
+				$fieldName = array('employeeNumber'),
 				$where = array($employeeNumber), $recordUpdate);
 
 
@@ -97,10 +98,10 @@ class trinityDataTHRIMS extends MY_Controller {
 				$oldValue1 = null;
 				$newValue1 =  $fieldNm . " - " . $value;
 				$userType = 1;
-				$this->_insertAuditTrail($actionName1, $systemForAuditName, $moduleName, $for1, $oldValue1, $newValue1, $userType);		
+				$this->_insertAuditTrail($actionName1, $systemForAuditName, $moduleName, $for1, $oldValue1, $newValue1, $userType);
 
 			$this->db->trans_complete();
-		
+
 			$fileName1 = "triune_employee_data-update-" . $this->_getCurrentDate();
 			$text1 = "UPDATE triune_employee_data ";
 			$text1 = $text1 .  "SET " . $fieldNm . " = '" .  $value . "', ";
@@ -109,13 +110,13 @@ class trinityDataTHRIMS extends MY_Controller {
 
 			if($this->db->trans_status() === FALSE) {
 				$this->_transactionFailed();
-				return FALSE;  
-			} 
+				return FALSE;
+			}
 
-				 /*   $message = '';                     
+				 /*   $message = '';
 					$message .= '<strong>Request from user</strong>' . $userName . '<br>';
 
-					
+
 					$emailSent = $this->_sendMail($toEmail = 'rdlagdaan@tua.edu.ph', $subject = "Email Notification from" . $userName, $message);
 					if(!$emailSent) {
 						//$this->session->set_flashdata('emailSent', '1');
@@ -125,12 +126,12 @@ class trinityDataTHRIMS extends MY_Controller {
 						//redirect(base_url().'user-acct/sign-up');
 
 					}*/
-			
+
 		$returnValue = array();
 		$returnValue['success'] = 1;
 		echo json_encode($returnValue);
 	}
-	
+
 
 	public function insertEmployeeCareerAssignmentsTHRIMS() {
 		$employeeNumber = $_POST["employeeNumber"];
@@ -140,30 +141,30 @@ class trinityDataTHRIMS extends MY_Controller {
 		$employeeStatusID = $_POST["employeeStatusID"];
 		$startDate = $_POST["startDate"];
 		$expiryDate = $_POST["expiryDate"];
-			
+
 		$userName = $this->_getUserName(1);
 
-		$transactionExist1 = $this->_getRecordsData($data = array('ID'), 
-		$tables = array('triune_employment_career_assignments'), 
-		$fieldName = array('startDate', 'employeeNumber', 'jobTitleID', 'departmentID', 'positionClassID', 'employeeStatusID'), 
-		$where = array($startDate, $employeeNumber, $jobTitleID, $departmentID, $positionClassID, $employeeStatusID), 
-		$join = null, $joinType = null, $sortBy = null, $sortOrder = null, 
+		$transactionExist1 = $this->_getRecordsData($data = array('ID'),
+		$tables = array('triune_employment_career_assignments'),
+		$fieldName = array('startDate', 'employeeNumber', 'jobTitleID', 'departmentID', 'positionClassID', 'employeeStatusID'),
+		$where = array($startDate, $employeeNumber, $jobTitleID, $departmentID, $positionClassID, $employeeStatusID),
+		$join = null, $joinType = null, $sortBy = null, $sortOrder = null,
 		$limit = null, 	$fieldNameLike = null, $like = null, $whereSpecial = null, $groupBy = null );
 
-		$transactionExist2 = $this->_getRecordsData($data = array('ID'), 
-		$tables = array('triune_employment_career_history'), 
-		$fieldName = array('startDate', 'employeeNumber', 'jobTitleID', 'departmentID', 'positionClassID', 'employeeStatusID'), 
-		$where = array($startDate, $employeeNumber, $jobTitleID, $departmentID, $positionClassID, $employeeStatusID), 
-		$join = null, $joinType = null, $sortBy = null, $sortOrder = null, 
+		$transactionExist2 = $this->_getRecordsData($data = array('ID'),
+		$tables = array('triune_employment_career_history'),
+		$fieldName = array('startDate', 'employeeNumber', 'jobTitleID', 'departmentID', 'positionClassID', 'employeeStatusID'),
+		$where = array($startDate, $employeeNumber, $jobTitleID, $departmentID, $positionClassID, $employeeStatusID),
+		$join = null, $joinType = null, $sortBy = null, $sortOrder = null,
 		$limit = null, 	$fieldNameLike = null, $like = null, $whereSpecial = null, $groupBy = null );
 
-		
+
 		if( empty($transactionExist1) && empty($transactionExist2)) {
-	
+			//different module names for auditname
 			$systemForAuditName1 = "THRIMS";
 			$moduleName1 = "CAREERASSIGNMENTCREATE";
 			$moduleName2 = "CAREERHISTORYCREATE";
-			
+			//this is where you insert your data
 			$insertData1 = null;
 			$insertData1 = array(
 				'employeeNumber' => $employeeNumber,
@@ -176,11 +177,11 @@ class trinityDataTHRIMS extends MY_Controller {
 				'userName' => $userName,
 				'timeStamp' => $this->_getTimeStamp(),
 				'workstationID' => $this->_getIPAddress(),
-			);				 
-
+			);
+			//data is then stored
 			$this->db->trans_start();
-			$insertedRecord1 =$this->_insertRecords($tableName = 'triune_employment_career_assignments', $insertData1);        			 
-			$insertedRecord2 =$this->_insertRecords($tableName = 'triune_employment_career_history', $insertData1);        			 
+			$insertedRecord1 =$this->_insertRecords($tableName = 'triune_employment_career_assignments', $insertData1);
+			$insertedRecord2 =$this->_insertRecords($tableName = 'triune_employment_career_history', $insertData1);
 
 
 				$actionName1 = "Insert Career Assignment";
@@ -188,15 +189,15 @@ class trinityDataTHRIMS extends MY_Controller {
 				$oldValue1 = null;
 				$newValue1 =  $insertData1;
 				$userType = 1;
-				$this->_insertAuditTrail($actionName1, $systemForAuditName1, $moduleName1, $for1, $oldValue1, $newValue1, $userType);		
+				$this->_insertAuditTrail($actionName1, $systemForAuditName1, $moduleName1, $for1, $oldValue1, $newValue1, $userType);
 
 				$actionName2 = "Insert Career History";
-				$this->_insertAuditTrail($actionName2, $systemForAuditName1, $moduleName2, $for1, $oldValue1, $newValue1, $userType);		
-				
-				
-				
+				$this->_insertAuditTrail($actionName2, $systemForAuditName1, $moduleName2, $for1, $oldValue1, $newValue1, $userType);
+
+
+
 			$this->db->trans_complete();
-		
+			//different file names for diffrerent assets and arrays
 			$fileName1 = "triune_employment_career_assignments-" . $this->_getCurrentDate();
 			$text1 = "INSERT INTO triune_employment_career_assignments ";
 			$text1 = $text1 .  "VALUES (" .  $insertedRecord1 . ", ";
@@ -213,7 +214,7 @@ class trinityDataTHRIMS extends MY_Controller {
 			$text1 = $text1 . ");";
 			$this->_insertTextLog($fileName1, $text1, $this->LOGFOLDER);
 
-			
+
 			$fileName2 = "triune_employment_career_history-" . $this->_getCurrentDate();
 			$text2 = "INSERT INTO triune_employment_career_history ";
 			$text2 = $text2 .  "VALUES (" .  $insertedRecord2 . ", ";
@@ -229,17 +230,17 @@ class trinityDataTHRIMS extends MY_Controller {
 			$text2 = $text2 .  "'".$this->_getIPAddress(). "'";
 			$text2 = $text2 . ");";
 			$this->_insertTextLog($fileName2, $text2, $this->LOGFOLDER);
-			
-			
+
+
 			if($this->db->trans_status() === FALSE) {
 				$this->_transactionFailed();
-				return FALSE;  
-			} 
+				return FALSE;
+			}
 
-                 /*   $message = '';                     
+                 /*   $message = '';
                     $message .= '<strong>Request from user</strong>' . $userName . '<br>';
- 
-					
+
+
 					$emailSent = $this->_sendMail($toEmail = 'rdlagdaan@tua.edu.ph', $subject = "Email Notification from" . $userName, $message);
                     if(!$emailSent) {
                         //$this->session->set_flashdata('emailSent', '1');
@@ -249,10 +250,10 @@ class trinityDataTHRIMS extends MY_Controller {
                         //redirect(base_url().'user-acct/sign-up');
 
                     }*/
-			
-			
+
+
 			$returnValue = array();
-			
+
 
 			$returnValue['success'] = 1;
 			echo json_encode($returnValue);
@@ -261,47 +262,47 @@ class trinityDataTHRIMS extends MY_Controller {
 			$returnValue = array();
 			$returnValue['success'] = 0;
 			echo json_encode($returnValue);
-		
+
 		}
 	}
 
-	
+
 
     public function getEmploymentCareerAssignmentsTHRIMS() {
 		$employeeNumber = $_GET["employeeNumber"];
-			
+
 		$selectField = "triune_employee_job_title.jobTitleDescription, triune_employee_department.departmentDescription, triune_employment_career_assignments.ID,";
 		$selectField = $selectField . "triune_employee_job_status.jobStatusDescription, triune_employee_job_status.statusCategory, triune_employee_position_class.positionClass, ";
 		$selectField = $selectField . "triune_employment_career_assignments.startDate, triune_employment_career_assignments.expiryDate, triune_employment_career_assignments.employeeStatusID";
 
-		$resultsCareer = $this->_getRecordsData($dataSelect2 = array($selectField), 
-			$tables = array('triune_employment_career_assignments', 'triune_employee_job_title', 'triune_employee_department', 'triune_employee_job_status', 'triune_employee_position_class'), 
-			$fieldName = array('employeeNumber'), $where = array($employeeNumber), 
-			$join = array('triune_employment_career_assignments.jobTitleID = triune_employee_job_title.jobTitleID', 'triune_employment_career_assignments.departmentID = triune_employee_department.departmentID', 'triune_employment_career_assignments.employeeStatusID = triune_employee_job_status.jobStatusID', 'triune_employment_career_assignments.positionClassID = triune_employee_position_class.positionClassID'), 
-			$joinType = array('left', 'left', 'left', 'left'), 
-			$sortBy = null, $sortOrder = null, $limit = null, 
-			$fieldNameLike = null, $like = null, 
+		$resultsCareer = $this->_getRecordsData($dataSelect2 = array($selectField),
+			$tables = array('triune_employment_career_assignments', 'triune_employee_job_title', 'triune_employee_department', 'triune_employee_job_status', 'triune_employee_position_class'),
+			$fieldName = array('employeeNumber'), $where = array($employeeNumber),
+			$join = array('triune_employment_career_assignments.jobTitleID = triune_employee_job_title.jobTitleID', 'triune_employment_career_assignments.departmentID = triune_employee_department.departmentID', 'triune_employment_career_assignments.employeeStatusID = triune_employee_job_status.jobStatusID', 'triune_employment_career_assignments.positionClassID = triune_employee_position_class.positionClassID'),
+			$joinType = array('left', 'left', 'left', 'left'),
+			$sortBy = null, $sortOrder = null, $limit = null,
+			$fieldNameLike = null, $like = null,
 			$whereSpecial = null, $groupBy = null );
-			
+
 		echo json_encode($resultsCareer);
 
 	}
 
-	
-	
+
+
 	public function deleteEmployeeCareerAssignmentsTHRIMS() {
 		$ID = $_POST["ID"];
-			
-		$userName = $this->_getUserName(1);
 
-		$record = $this->_getRecordsData($data = array('*'), 
-		$tables = array('triune_employment_career_assignments'), 
-		$fieldName = array('ID'), 
-		$where = array($ID), 
-		$join = null, $joinType = null, $sortBy = null, $sortOrder = null, 
+		$userName = $this->_getUserName(1);
+		//this records the data and stores it afterwards
+		$record = $this->_getRecordsData($data = array('*'),
+		$tables = array('triune_employment_career_assignments'),
+		$fieldName = array('ID'),
+		$where = array($ID),
+		$join = null, $joinType = null, $sortBy = null, $sortOrder = null,
 		$limit = null, 	$fieldNameLike = null, $like = null, $whereSpecial = null, $groupBy = null );
 
-		
+
 		$systemForAuditName = "THRIMS";
 		$moduleName = "CAREERASSIGNMENTDELETE";
 
@@ -311,13 +312,13 @@ class trinityDataTHRIMS extends MY_Controller {
 			$fieldName = array('ID');
 			$this->_deleteRecords('triune_employment_career_assignments', $fieldName, $where);
 
-
+			//it deletes carrer assignments
 			$actionName1 = "Delete Career Assignment";
 			$for1 = $ID . ";" . $userName;
 			$oldValue1 = $record;
 			$newValue1 =  null;
 			$userType = 1;
-			$this->_insertAuditTrail($actionName1, $systemForAuditName, $moduleName, $for1, $oldValue1, $newValue1, $userType);		
+			$this->_insertAuditTrail($actionName1, $systemForAuditName, $moduleName, $for1, $oldValue1, $newValue1, $userType);
 
 		$this->db->trans_complete();
 
@@ -340,13 +341,13 @@ class trinityDataTHRIMS extends MY_Controller {
 
 		if($this->db->trans_status() === FALSE) {
 			$this->_transactionFailed();
-			return FALSE;  
-		} 
+			return FALSE;
+		}
 
-			 /*   $message = '';                     
+			 /*   $message = '';
 				$message .= '<strong>Request from user</strong>' . $userName . '<br>';
 
-				
+
 				$emailSent = $this->_sendMail($toEmail = 'rdlagdaan@tua.edu.ph', $subject = "Email Notification from" . $userName, $message);
 				if(!$emailSent) {
 					//$this->session->set_flashdata('emailSent', '1');
@@ -356,13 +357,13 @@ class trinityDataTHRIMS extends MY_Controller {
 					//redirect(base_url().'user-acct/sign-up');
 
 				}*/
-		
-		
+
+
 		$returnValue = array();
 		$returnValue['success'] = 1;
 		echo json_encode($returnValue);
 	}
-	
+
 	public function updateEmployeeCareerAssignmentsTHRIMS() {
 		$startDate = $_POST["startDate"];
 		$expiryDate = $_POST["expiryDate"];
@@ -373,15 +374,15 @@ class trinityDataTHRIMS extends MY_Controller {
 		$ID = $_POST["ID"];
 		$userName = $this->_getUserName(1);
 
-		
-		$record = $this->_getRecordsData($data = array('*'), 
-		$tables = array('triune_employment_career_assignments'), 
-		$fieldName = array('ID'), 
-		$where = array($ID), 
-		$join = null, $joinType = null, $sortBy = null, $sortOrder = null, 
+
+		$record = $this->_getRecordsData($data = array('*'),
+		$tables = array('triune_employment_career_assignments'),
+		$fieldName = array('ID'),
+		$where = array($ID),
+		$join = null, $joinType = null, $sortBy = null, $sortOrder = null,
 		$limit = null, 	$fieldNameLike = null, $like = null, $whereSpecial = null, $groupBy = null );
-		
-	
+
+
 		$systemForAuditName = "THRIMS";
 		$moduleName = "CAREEREMPLOYMENTUPDATE";
 
@@ -394,9 +395,9 @@ class trinityDataTHRIMS extends MY_Controller {
 				'departmentID' => $departmentID,
 				'positionClassID' => $positionClassID,
 			);
-		
-			$this->_updateRecords($tableName = 'triune_employment_career_assignments', 
-			$fieldName = array('ID'), 
+
+			$this->_updateRecords($tableName = 'triune_employment_career_assignments',
+			$fieldName = array('ID'),
 			$where = array($ID), $recordUpdate);
 
 
@@ -405,10 +406,10 @@ class trinityDataTHRIMS extends MY_Controller {
 			$oldValue1 = $record;
 			$newValue1 =  $recordUpdate;
 			$userType = 1;
-			$this->_insertAuditTrail($actionName1, $systemForAuditName, $moduleName, $for1, $oldValue1, $newValue1, $userType);		
+			$this->_insertAuditTrail($actionName1, $systemForAuditName, $moduleName, $for1, $oldValue1, $newValue1, $userType);
 
 		$this->db->trans_complete();
-	
+
 		$fileName1 = "triune_employment_career_assignments-update-" . $this->_getCurrentDate();
 		$text1 = "UPDATE triune_employment_career_assignments ";
 		$text1 = $text1 .  "SET startDate = '" .  $record[0]->startDate . "', ";
@@ -421,13 +422,13 @@ class trinityDataTHRIMS extends MY_Controller {
 
 		if($this->db->trans_status() === FALSE) {
 			$this->_transactionFailed();
-			return FALSE;  
-		} 
+			return FALSE;
+		}
 
-			 /*   $message = '';                     
+			 /*   $message = '';
 				$message .= '<strong>Request from user</strong>' . $userName . '<br>';
 
-				
+
 				$emailSent = $this->_sendMail($toEmail = 'rdlagdaan@tua.edu.ph', $subject = "Email Notification from" . $userName, $message);
 				if(!$emailSent) {
 					//$this->session->set_flashdata('emailSent', '1');
@@ -437,49 +438,49 @@ class trinityDataTHRIMS extends MY_Controller {
 					//redirect(base_url().'user-acct/sign-up');
 
 				}*/
-		
+
 		$returnValue = array();
 		$returnValue['success'] = 1;
 		echo json_encode($returnValue);
 
-	}	
+	}
 
 
     public function getChildrenTHRIMS() {
 		$employeeNumber = $_GET["employeeNumber"];
 		//echo $locationCode;
-		$results = $this->_getRecordsData($data = array('*'), 
-			$tables = array('triune_employee_children'), $fieldName = array('employeeNumber'), $where = array($employeeNumber), $join = null, $joinType = null, 
-			$sortBy = array('fullName'), $sortOrder = array('asc'), $limit = null, 
-			$fieldNameLike = null, $like = null, 
+		$results = $this->_getRecordsData($data = array('*'),
+			$tables = array('triune_employee_children'), $fieldName = array('employeeNumber'), $where = array($employeeNumber), $join = null, $joinType = null,
+			$sortBy = array('fullName'), $sortOrder = array('asc'), $limit = null,
+			$fieldNameLike = null, $like = null,
 			$whereSpecial = null, $groupBy = null );
 
 			echo json_encode($results);
 	}
-	
+
 
 	public function insertChildrenTHRIMS() {
 		$employeeNumber = $_POST["employeeNumber"];
 		$fullName = $_POST["fullName"];
 		$birthDay = $_POST["birthDay"];
 		$civilStatus = $_POST["civilStatus"];
-			
+
 		$userName = $this->_getUserName(1);
 
-		$transactionExist1 = $this->_getRecordsData($data = array('ID'), 
-		$tables = array('triune_employee_children'), 
-		$fieldName = array('employeeNumber', 'fullName', 'birthDay'), 
-		$where = array($employeeNumber, $fullName, $birthDay), 
-		$join = null, $joinType = null, $sortBy = null, $sortOrder = null, 
+		$transactionExist1 = $this->_getRecordsData($data = array('ID'),
+		$tables = array('triune_employee_children'),
+		$fieldName = array('employeeNumber', 'fullName', 'birthDay'),
+		$where = array($employeeNumber, $fullName, $birthDay),
+		$join = null, $joinType = null, $sortBy = null, $sortOrder = null,
 		$limit = null, 	$fieldNameLike = null, $like = null, $whereSpecial = null, $groupBy = null );
 
 
-		
+
 		if( empty($transactionExist1)) {
-	
+
 			$systemForAuditName1 = "THRIMS";
 			$moduleName1 = "CHILDRENCREATE";
-			
+
 			$insertData1 = null;
 			$insertData1 = array(
 				'employeeNumber' => $employeeNumber,
@@ -489,10 +490,10 @@ class trinityDataTHRIMS extends MY_Controller {
 				'userName' => $userName,
 				'timeStamp' => $this->_getTimeStamp(),
 				'workstationID' => $this->_getIPAddress(),
-			);				 
+			);
 
 			$this->db->trans_start();
-			$insertedRecord1 =$this->_insertRecords($tableName = 'triune_employee_children', $insertData1);        			 
+			$insertedRecord1 =$this->_insertRecords($tableName = 'triune_employee_children', $insertData1);
 
 
 				$actionName1 = "Insert Children";
@@ -500,10 +501,10 @@ class trinityDataTHRIMS extends MY_Controller {
 				$oldValue1 = null;
 				$newValue1 =  $insertData1;
 				$userType = 1;
-				$this->_insertAuditTrail($actionName1, $systemForAuditName1, $moduleName1, $for1, $oldValue1, $newValue1, $userType);		
-				
+				$this->_insertAuditTrail($actionName1, $systemForAuditName1, $moduleName1, $for1, $oldValue1, $newValue1, $userType);
+
 			$this->db->trans_complete();
-		
+			//insert the needed things on the text and it will store the current data for each text
 			$fileName1 = "triune_employee_children-" . $this->_getCurrentDate();
 			$text1 = "INSERT INTO triune_employee_children ";
 			$text1 = $text1 .  "VALUES (" .  $insertedRecord1 . ", ";
@@ -519,13 +520,13 @@ class trinityDataTHRIMS extends MY_Controller {
 
 			if($this->db->trans_status() === FALSE) {
 				$this->_transactionFailed();
-				return FALSE;  
-			} 
+				return FALSE;
+			}
 
-                 /*   $message = '';                     
+                 /*   $message = '';
                     $message .= '<strong>Request from user</strong>' . $userName . '<br>';
- 
-					
+
+
 					$emailSent = $this->_sendMail($toEmail = 'rdlagdaan@tua.edu.ph', $subject = "Email Notification from" . $userName, $message);
                     if(!$emailSent) {
                         //$this->session->set_flashdata('emailSent', '1');
@@ -535,11 +536,11 @@ class trinityDataTHRIMS extends MY_Controller {
                         //redirect(base_url().'user-acct/sign-up');
 
                     }*/
-			
-			
-			$returnValue = array();
-			
 
+
+			$returnValue = array();
+
+			//if return value is success 
 			$returnValue['success'] = 1;
 			echo json_encode($returnValue);
 
@@ -547,7 +548,7 @@ class trinityDataTHRIMS extends MY_Controller {
 			$returnValue = array();
 			$returnValue['success'] = 0;
 			echo json_encode($returnValue);
-		
+
 		}
 	}
 
@@ -560,15 +561,15 @@ class trinityDataTHRIMS extends MY_Controller {
 		$ID = $_POST["ID"];
 		$userName = $this->_getUserName(1);
 
-		
-		$record = $this->_getRecordsData($data = array('*'), 
-		$tables = array('triune_employee_children'), 
-		$fieldName = array('ID'), 
-		$where = array($ID), 
-		$join = null, $joinType = null, $sortBy = null, $sortOrder = null, 
+
+		$record = $this->_getRecordsData($data = array('*'),
+		$tables = array('triune_employee_children'),
+		$fieldName = array('ID'),
+		$where = array($ID),
+		$join = null, $joinType = null, $sortBy = null, $sortOrder = null,
 		$limit = null, 	$fieldNameLike = null, $like = null, $whereSpecial = null, $groupBy = null );
-		
-	
+
+
 		$systemForAuditName = "THRIMS";
 		$moduleName = "CHILDRENUPDATE";
 
@@ -579,9 +580,9 @@ class trinityDataTHRIMS extends MY_Controller {
 				'birthDay' => $birthDay,
 				'civilStatus' => $civilStatus,
 			);
-		
-			$this->_updateRecords($tableName = 'triune_employee_children', 
-			$fieldName = array('ID'), 
+
+			$this->_updateRecords($tableName = 'triune_employee_children',
+			$fieldName = array('ID'),
 			$where = array($ID), $recordUpdate);
 
 
@@ -590,10 +591,10 @@ class trinityDataTHRIMS extends MY_Controller {
 			$oldValue1 = $record;
 			$newValue1 =  $recordUpdate;
 			$userType = 1;
-			$this->_insertAuditTrail($actionName1, $systemForAuditName, $moduleName, $for1, $oldValue1, $newValue1, $userType);		
+			$this->_insertAuditTrail($actionName1, $systemForAuditName, $moduleName, $for1, $oldValue1, $newValue1, $userType);
 
 		$this->db->trans_complete();
-	
+
 		$fileName1 = "triune_employee_children-update-" . $this->_getCurrentDate();
 		$text1 = "UPDATE triune_employee_children ";
 		$text1 = $text1 .  "SET fullName = '" .  $record[0]->fullName . "', ";
@@ -604,13 +605,13 @@ class trinityDataTHRIMS extends MY_Controller {
 
 		if($this->db->trans_status() === FALSE) {
 			$this->_transactionFailed();
-			return FALSE;  
-		} 
+			return FALSE;
+		}
 
-			 /*   $message = '';                     
+			 /*   $message = '';
 				$message .= '<strong>Request from user</strong>' . $userName . '<br>';
 
-				
+
 				$emailSent = $this->_sendMail($toEmail = 'rdlagdaan@tua.edu.ph', $subject = "Email Notification from" . $userName, $message);
 				if(!$emailSent) {
 					//$this->session->set_flashdata('emailSent', '1');
@@ -620,27 +621,27 @@ class trinityDataTHRIMS extends MY_Controller {
 					//redirect(base_url().'user-acct/sign-up');
 
 				}*/
-		
+
 		$returnValue = array();
 		$returnValue['success'] = 1;
 		echo json_encode($returnValue);
 
-	}	
+	}
 
 
 	public function deleteChildrenTHRIMS() {
 		$ID = $_POST["ID"];
-			
+
 		$userName = $this->_getUserName(1);
 
-		$record = $this->_getRecordsData($data = array('*'), 
-		$tables = array('triune_employee_children'), 
-		$fieldName = array('ID'), 
-		$where = array($ID), 
-		$join = null, $joinType = null, $sortBy = null, $sortOrder = null, 
+		$record = $this->_getRecordsData($data = array('*'),
+		$tables = array('triune_employee_children'),
+		$fieldName = array('ID'),
+		$where = array($ID),
+		$join = null, $joinType = null, $sortBy = null, $sortOrder = null,
 		$limit = null, 	$fieldNameLike = null, $like = null, $whereSpecial = null, $groupBy = null );
 
-		
+
 		$systemForAuditName = "THRIMS";
 		$moduleName = "CHILDRENDELETE";
 
@@ -656,7 +657,7 @@ class trinityDataTHRIMS extends MY_Controller {
 			$oldValue1 = $record;
 			$newValue1 =  null;
 			$userType = 1;
-			$this->_insertAuditTrail($actionName1, $systemForAuditName, $moduleName, $for1, $oldValue1, $newValue1, $userType);		
+			$this->_insertAuditTrail($actionName1, $systemForAuditName, $moduleName, $for1, $oldValue1, $newValue1, $userType);
 
 		$this->db->trans_complete();
 
@@ -674,13 +675,13 @@ class trinityDataTHRIMS extends MY_Controller {
 
 		if($this->db->trans_status() === FALSE) {
 			$this->_transactionFailed();
-			return FALSE;  
-		} 
+			return FALSE;
+		}
 
-			 /*   $message = '';                     
+			 /*   $message = '';
 				$message .= '<strong>Request from user</strong>' . $userName . '<br>';
 
-				
+
 				$emailSent = $this->_sendMail($toEmail = 'rdlagdaan@tua.edu.ph', $subject = "Email Notification from" . $userName, $message);
 				if(!$emailSent) {
 					//$this->session->set_flashdata('emailSent', '1');
@@ -690,8 +691,8 @@ class trinityDataTHRIMS extends MY_Controller {
 					//redirect(base_url().'user-acct/sign-up');
 
 				}*/
-		
-		
+
+
 		$returnValue = array();
 		$returnValue['success'] = 1;
 		echo json_encode($returnValue);
@@ -702,33 +703,33 @@ class trinityDataTHRIMS extends MY_Controller {
 
 	public function insertGenderTHRIMS() {
 		$gender = $_POST["gender"];
-			
+
 		$userName = $this->_getUserName(1);
 
-		$transactionExist1 = $this->_getRecordsData($data = array('ID'), 
-		$tables = array('triune_employee_gender'), 
-		$fieldName = array('gender'), 
-		$where = array($gender), 
-		$join = null, $joinType = null, $sortBy = null, $sortOrder = null, 
+		$transactionExist1 = $this->_getRecordsData($data = array('ID'),
+		$tables = array('triune_employee_gender'),
+		$fieldName = array('gender'),
+		$where = array($gender),
+		$join = null, $joinType = null, $sortBy = null, $sortOrder = null,
 		$limit = null, 	$fieldNameLike = null, $like = null, $whereSpecial = null, $groupBy = null );
 
 
-		
+
 		if( empty($transactionExist1)) {
-	
+
 			$systemForAuditName1 = "THRIMS";
 			$moduleName1 = "GENDERCREATE";
-			
+
 			$insertData1 = null;
 			$insertData1 = array(
 				'gender' => $gender,
 				'userName' => $userName,
 				'timeStamp' => $this->_getTimeStamp(),
 				'workstationID' => $this->_getIPAddress(),
-			);				 
+			);
 
 			$this->db->trans_start();
-			$insertedRecord1 =$this->_insertRecords($tableName = 'triune_employee_gender', $insertData1);        			 
+			$insertedRecord1 =$this->_insertRecords($tableName = 'triune_employee_gender', $insertData1);
 
 
 				$actionName1 = "Insert Gender";
@@ -736,10 +737,10 @@ class trinityDataTHRIMS extends MY_Controller {
 				$oldValue1 = null;
 				$newValue1 =  $insertData1;
 				$userType = 1;
-				$this->_insertAuditTrail($actionName1, $systemForAuditName1, $moduleName1, $for1, $oldValue1, $newValue1, $userType);		
-				
+				$this->_insertAuditTrail($actionName1, $systemForAuditName1, $moduleName1, $for1, $oldValue1, $newValue1, $userType);
+
 			$this->db->trans_complete();
-		
+
 			$fileName1 = "triune_employee_gender-" . $this->_getCurrentDate();
 			$text1 = "INSERT INTO triune_employee_gender ";
 			$text1 = $text1 .  "VALUES (" .  $insertedRecord1 . ", ";
@@ -753,13 +754,13 @@ class trinityDataTHRIMS extends MY_Controller {
 
 			if($this->db->trans_status() === FALSE) {
 				$this->_transactionFailed();
-				return FALSE;  
-			} 
+				return FALSE;
+			}
 
-                 /*   $message = '';                     
+                 /*   $message = '';
                     $message .= '<strong>Request from user</strong>' . $userName . '<br>';
- 
-					
+
+
 					$emailSent = $this->_sendMail($toEmail = 'rdlagdaan@tua.edu.ph', $subject = "Email Notification from" . $userName, $message);
                     if(!$emailSent) {
                         //$this->session->set_flashdata('emailSent', '1');
@@ -769,10 +770,10 @@ class trinityDataTHRIMS extends MY_Controller {
                         //redirect(base_url().'user-acct/sign-up');
 
                     }*/
-			
-			
+
+
 			$returnValue = array();
-			
+
 
 			$returnValue['success'] = 1;
 			echo json_encode($returnValue);
@@ -781,7 +782,7 @@ class trinityDataTHRIMS extends MY_Controller {
 			$returnValue = array();
 			$returnValue['success'] = 0;
 			echo json_encode($returnValue);
-		
+
 		}
 	}
 
@@ -793,15 +794,15 @@ class trinityDataTHRIMS extends MY_Controller {
 		$userName = $this->_getUserName(1);
 
 
-			$transactionExist1 = $this->_getRecordsData($data = array('gender'), 
-			$tables = array('triune_employee_gender'), 
-			$fieldName = array('ID'), 
-			$where = array($ID), 
-			$join = null, $joinType = null, $sortBy = null, $sortOrder = null, 
+			$transactionExist1 = $this->_getRecordsData($data = array('gender'),
+			$tables = array('triune_employee_gender'),
+			$fieldName = array('ID'),
+			$where = array($ID),
+			$join = null, $joinType = null, $sortBy = null, $sortOrder = null,
 			$limit = null, 	$fieldNameLike = null, $like = null, $whereSpecial = null, $groupBy = null );
 
 			$oldGender = $transactionExist1[0]->gender;
-		
+
 			$systemForAuditName = "THRIMS";
 			$moduleName = "GENDERUPDATE";
 
@@ -810,9 +811,9 @@ class trinityDataTHRIMS extends MY_Controller {
 				$recordUpdate = array(
 					'gender' => $gender,
 				);
-			
-				$this->_updateRecords($tableName = 'triune_employee_gender', 
-				$fieldName = array('ID'), 
+
+				$this->_updateRecords($tableName = 'triune_employee_gender',
+				$fieldName = array('ID'),
 				$where = array($ID), $recordUpdate);
 
 
@@ -821,10 +822,10 @@ class trinityDataTHRIMS extends MY_Controller {
 				$oldValue1 = null;
 				$newValue1 =  $gender;
 				$userType = 1;
-				$this->_insertAuditTrail($actionName1, $systemForAuditName, $moduleName, $for1, $oldValue1, $newValue1, $userType);		
+				$this->_insertAuditTrail($actionName1, $systemForAuditName, $moduleName, $for1, $oldValue1, $newValue1, $userType);
 
 			$this->db->trans_complete();
-		
+
 			$fileName1 = "triune_employee_gender-update-" . $this->_getCurrentDate();
 			$text1 = "UPDATE triune_employee_gender ";
 			$text1 = $text1 .  "SET " . 'gender' . " = '" .  $oldGender . "'";
@@ -833,13 +834,13 @@ class trinityDataTHRIMS extends MY_Controller {
 
 			if($this->db->trans_status() === FALSE) {
 				$this->_transactionFailed();
-				return FALSE;  
-			} 
+				return FALSE;
+			}
 
-				 /*   $message = '';                     
+				 /*   $message = '';
 					$message .= '<strong>Request from user</strong>' . $userName . '<br>';
 
-					
+
 					$emailSent = $this->_sendMail($toEmail = 'rdlagdaan@tua.edu.ph', $subject = "Email Notification from" . $userName, $message);
 					if(!$emailSent) {
 						//$this->session->set_flashdata('emailSent', '1');
@@ -849,26 +850,26 @@ class trinityDataTHRIMS extends MY_Controller {
 						//redirect(base_url().'user-acct/sign-up');
 
 					}*/
-			
+
 		$returnValue = array();
 		$returnValue['success'] = 1;
 		echo json_encode($returnValue);
 	}
-	
-	
+
+
 	public function deleteGenderTHRIMS() {
 		$ID = $_POST["ID"];
-			
+
 		$userName = $this->_getUserName(1);
 
-		$record = $this->_getRecordsData($data = array('*'), 
-		$tables = array('triune_employee_gender'), 
-		$fieldName = array('ID'), 
-		$where = array($ID), 
-		$join = null, $joinType = null, $sortBy = null, $sortOrder = null, 
+		$record = $this->_getRecordsData($data = array('*'),
+		$tables = array('triune_employee_gender'),
+		$fieldName = array('ID'),
+		$where = array($ID),
+		$join = null, $joinType = null, $sortBy = null, $sortOrder = null,
 		$limit = null, 	$fieldNameLike = null, $like = null, $whereSpecial = null, $groupBy = null );
 
-		
+
 		$systemForAuditName = "THRIMS";
 		$moduleName = "GENDERDELETE";
 
@@ -884,7 +885,7 @@ class trinityDataTHRIMS extends MY_Controller {
 			$oldValue1 = $record;
 			$newValue1 =  null;
 			$userType = 1;
-			$this->_insertAuditTrail($actionName1, $systemForAuditName, $moduleName, $for1, $oldValue1, $newValue1, $userType);		
+			$this->_insertAuditTrail($actionName1, $systemForAuditName, $moduleName, $for1, $oldValue1, $newValue1, $userType);
 
 		$this->db->trans_complete();
 
@@ -901,13 +902,13 @@ class trinityDataTHRIMS extends MY_Controller {
 
 		if($this->db->trans_status() === FALSE) {
 			$this->_transactionFailed();
-			return FALSE;  
-		} 
+			return FALSE;
+		}
 
-			 /*   $message = '';                     
+			 /*   $message = '';
 				$message .= '<strong>Request from user</strong>' . $userName . '<br>';
 
-				
+
 				$emailSent = $this->_sendMail($toEmail = 'rdlagdaan@tua.edu.ph', $subject = "Email Notification from" . $userName, $message);
 				if(!$emailSent) {
 					//$this->session->set_flashdata('emailSent', '1');
@@ -917,11 +918,11 @@ class trinityDataTHRIMS extends MY_Controller {
 					//redirect(base_url().'user-acct/sign-up');
 
 				}*/
-		
-		
+
+
 		$returnValue = array();
 		$returnValue['success'] = 1;
 		echo json_encode($returnValue);
 	}
-	
+
 }

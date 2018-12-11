@@ -12,7 +12,7 @@ class trinityDataPurchasing extends MY_Controller {
 	 * config/routes.php, it's displayed at http://tua.edu.ph/triune
 	 *
 	 * AUTHOR: Randy D. Lagdaan
-	 * DESCRIPTION: Purchasing Data Controller.  
+	 * DESCRIPTION: Purchasing Data Controller.
 	 * DATE CREATED: July 15, 2018
      * DATE UPDATED: July 15, 2018
 	 */
@@ -21,16 +21,16 @@ class trinityDataPurchasing extends MY_Controller {
     function __construct() {
         parent::__construct();
 		$this->load->library('session');
-        $this->load->library('form_validation'); 
+        $this->load->library('form_validation');
     }//function __construct()
 
 
-
+//to insert values for requestpurpose,requestrmarks,dateneededand and displaying error if no valuesinputted in thearray
 	public function validateRequestASRS() {
 
 		$this->form_validation->set_rules('requestPurpose', 'Request Purpose', 'required');
-		$this->form_validation->set_rules('requestRemarks', 'Request Remarks', 'required');  
-		$this->form_validation->set_rules('dateNeeded', 'Date Needed', 'required|regex_match[/\d{4}\-\d{2}-\d{2}/]');    
+		$this->form_validation->set_rules('requestRemarks', 'Request Remarks', 'required');
+		$this->form_validation->set_rules('dateNeeded', 'Date Needed', 'required|regex_match[/\d{4}\-\d{2}-\d{2}/]');
 
 		$requestPurpose = $_POST["requestPurpose"];
 		$requestRemarks = $_POST["requestRemarks"];
@@ -41,20 +41,20 @@ class trinityDataPurchasing extends MY_Controller {
 		$this->session->set_flashdata('dateNeeded', $dateNeeded);
 
 
-		if ($this->form_validation->run() == FALSE) {   
+		if ($this->form_validation->run() == FALSE) {
 			echo json_encode($this->form_validation->error_array());
-		}else{    
+		}else{
 
 			$returnValue = array();
-			
+
 			$returnValue['requestPurpose'] = $requestPurpose;
 			$returnValue['requestRemarks'] = $requestRemarks;
 			$returnValue['dateNeeded'] = $dateNeeded;
 
 			$returnValue['success'] = 1;
 			echo json_encode($returnValue);
-			
-		}	
+
+		}
 
 	}
 
@@ -62,32 +62,32 @@ class trinityDataPurchasing extends MY_Controller {
 		$requestPurpose = $_POST["requestPurpose"];
 		$requestRemarks = $_POST["requestRemarks"];
 		$dateNeeded = $_POST["dateNeeded"];
-		
-		$userName = $this->_getUserName(1);
 
-		$transactionExist = $this->_getRecordsData($data = array('requestPurpose'), 
-		$tables = array('triune_job_request_transaction_asrs'), 
-		$fieldName = array('requestPurpose', 'requestRemarks', 'dateNeeded', 'userName'), 
-		$where = array($requestPurpose, $requestRemarks, $dateNeeded, $userName), 
-		$join = null, $joinType = null, $sortBy = null, $sortOrder = null, 
+		$userName = $this->_getUserName(1);
+//getting the values from requestpurpose
+		$transactionExist = $this->_getRecordsData($data = array('requestPurpose'),
+		$tables = array('triune_job_request_transaction_asrs'),
+		$fieldName = array('requestPurpose', 'requestRemarks', 'dateNeeded', 'userName'),
+		$where = array($requestPurpose, $requestRemarks, $dateNeeded, $userName),
+		$join = null, $joinType = null, $sortBy = null, $sortOrder = null,
 		$limit = null, 	$fieldNameLike = null, $like = null, $whereSpecial = null, $groupBy = null );
-		
+
 
 		if(empty($transactionExist)) {
 
-		
-			$results2 = $this->_getRecordsData($rec = array('triune_employee_data.*'), 
-			$tables = array('triune_user', 'triune_employee_data'), 
-			$fieldName = array('triune_user.userName'), $where = array($userName), 
-			$join = array('triune_user.userNumber = triune_employee_data.employeeNumber'), $joinType = array('left'), $sortBy = null, $sortOrder = null, 
-			$limit = null, 	$fieldNameLike = null, $like = null, $whereSpecial = null, 
+	//getting the values from employee data
+			$results2 = $this->_getRecordsData($rec = array('triune_employee_data.*'),
+			$tables = array('triune_user', 'triune_employee_data'),
+			$fieldName = array('triune_user.userName'), $where = array($userName),
+			$join = array('triune_user.userNumber = triune_employee_data.employeeNumber'), $joinType = array('left'), $sortBy = null, $sortOrder = null,
+			$limit = null, 	$fieldNameLike = null, $like = null, $whereSpecial = null,
 			$groupBy = null );
 
 			$departmentUnit = $results2[0]->currentDepartment;
-		
-		
-		
-		
+
+
+
+		//submitting the values from requestcreate
 			$systemForAuditName = "ASRS";
 			$moduleName = "REQUESTCREATE";
 
@@ -103,17 +103,17 @@ class trinityDataPurchasing extends MY_Controller {
 				'workstationID' => $this->_getIPAddress(),
 				'timeStamp' => $this->_getTimeStamp(),
 				'updatedBy' => $userName,
-				
-			);				 
 
+			);
+// to get the values from request transaction and inserting it to new transaction request
 			$this->db->trans_start();
-				$this->_insertRecords($tableName = 'triune_job_request_transaction_asrs', $insertData1);        			 
+				$this->_insertRecords($tableName = 'triune_job_request_transaction_asrs', $insertData1);
 
-				$insertedRecord1 = $this->_getRecordsData($data = array('ID'), 
-				$tables = array('triune_job_request_transaction_asrs'), 
-				$fieldName = array('requestPurpose', 'requestRemarks', 'dateNeeded', 'userName'), 
-				$where = array($requestPurpose, $requestRemarks, $dateNeeded, $userName), 
-				$join = null, $joinType = null, $sortBy = null, $sortOrder = null, 
+				$insertedRecord1 = $this->_getRecordsData($data = array('ID'),
+				$tables = array('triune_job_request_transaction_asrs'),
+				$fieldName = array('requestPurpose', 'requestRemarks', 'dateNeeded', 'userName'),
+				$where = array($requestPurpose, $requestRemarks, $dateNeeded, $userName),
+				$join = null, $joinType = null, $sortBy = null, $sortOrder = null,
 				$limit = null, 	$fieldNameLike = null, $like = null, $whereSpecial = null, $groupBy = null );
 
 				$actionName1 = "Insert New Transaction Request";
@@ -121,7 +121,7 @@ class trinityDataPurchasing extends MY_Controller {
 				$oldValue1 = null;
 				$newValue1 =  $insertData1;
 				$userType = 1;
-				$this->_insertAuditTrail($actionName1, $systemForAuditName, $moduleName, $for1, $oldValue1, $newValue1, $userType);		
+				$this->_insertAuditTrail($actionName1, $systemForAuditName, $moduleName, $for1, $oldValue1, $newValue1, $userType);
 
 
 			$insertData2 = null;
@@ -132,27 +132,28 @@ class trinityDataPurchasing extends MY_Controller {
 				'workstationID' => $this->_getIPAddress(),
 				'timeStamp' => $this->_getTimeStamp(),
 				'updatedBy' => $userName,
-				
-			);				 
 
-				$this->_insertRecords($tableName = 'triune_job_request_transaction_asrs_status_history', $insertData2);        			 
+			);
+// to insert record for transanction status history
+				$this->_insertRecords($tableName = 'triune_job_request_transaction_asrs_status_history', $insertData2);
 
-				$insertedRecord2 = $this->_getRecordsData($data = array('ID'), 
-				$tables = array('triune_job_request_transaction_asrs_status_history'), 
-				$fieldName = array('requestNumber', 'requestStatus', 'userName'), 
-				$where = array($insertedRecord1[0]->ID, $this->_getRequestStatus('NEW', 'ASRS'), $userName), 
-				$join = null, $joinType = null, $sortBy = null, $sortOrder = null, 
+				$insertedRecord2 = $this->_getRecordsData($data = array('ID'),
+				$tables = array('triune_job_request_transaction_asrs_status_history'),
+				$fieldName = array('requestNumber', 'requestStatus', 'userName'),
+				$where = array($insertedRecord1[0]->ID, $this->_getRequestStatus('NEW', 'ASRS'), $userName),
+				$join = null, $joinType = null, $sortBy = null, $sortOrder = null,
 				$limit = null, 	$fieldNameLike = null, $like = null, $whereSpecial = null, $groupBy = null );
 
+//updating the transanction request status history
 				$actionName2 = "Insert New Transaction Request Status History";
 				$for2 = $insertedRecord2[0]->ID . ";" .$userName;
 				$oldValue2 = null;
 				$newValue2 =  $insertData2;
-				$userType = 1; 
-				$this->_insertAuditTrail($actionName2, $systemForAuditName, $moduleName, $for2, $oldValue2, $newValue2, $userType);		
+				$userType = 1;
+				$this->_insertAuditTrail($actionName2, $systemForAuditName, $moduleName, $for2, $oldValue2, $newValue2, $userType);
 
 			$this->db->trans_complete();
-		
+
 			$fileName1 = "triune_job_request_transaction_asrs-" . $this->_getCurrentDate();
 			$text1 = "INSERT INTO triune_job_request_transaction_asrs ";
 			$text1 = $text1 .  "VALUES (" .  $insertedRecord1[0]->ID . ", ";
@@ -179,17 +180,17 @@ class trinityDataPurchasing extends MY_Controller {
 			$text2 = $text2 .  "'".$userName;
 			$text2 = $text2 . "');";
 			$this->_insertTextLog($fileName2, $text2,  $this->LOGFOLDER);
-			
+
 
 			if($this->db->trans_status() === FALSE) {
 				$this->_transactionFailed();
-				return FALSE;  
-			} 
+				return FALSE;
+			}
 
-                 /*   $message = '';                     
+                 /*   $message = '';
                     $message .= '<strong>Request from user</strong>' . $userName . '<br>';
- 
-					
+
+
 					$emailSent = $this->_sendMail($toEmail = 'rdlagdaan@tua.edu.ph', $subject = "Email Notification from" . $userName, $message);
                     if(!$emailSent) {
                         //$this->session->set_flashdata('emailSent', '1');
@@ -199,8 +200,8 @@ class trinityDataPurchasing extends MY_Controller {
                         //redirect(base_url().'user-acct/sign-up');
 
                     }*/
-			
-			
+
+
 			$returnValue = array();
 			$returnValue['ID'] = $insertedRecord1[0]->ID;
 			$returnValue['success'] = 1;
@@ -209,12 +210,12 @@ class trinityDataPurchasing extends MY_Controller {
 		} //if(empty($transactionExist))
 
 	}
-
+//inserting values for request items and for requested item if no values was inputted in the array quantity,unitcode and assetname
 	public function validateRequestItemsASRS() {
 
 		$this->form_validation->set_rules('quantity', 'Quantiy', 'required');
-		$this->form_validation->set_rules('unitCode', 'Unit', 'required');  
-		$this->form_validation->set_rules('assetName', 'Asset Description', 'required');    
+		$this->form_validation->set_rules('unitCode', 'Unit', 'required');
+		$this->form_validation->set_rules('assetName', 'Asset Description', 'required');
 
 		$quantity = $_POST["quantity"];
 		$unitCode = $_POST["unitCode"];
@@ -225,28 +226,28 @@ class trinityDataPurchasing extends MY_Controller {
 		$this->session->set_flashdata('assetName', $assetName);
 
 
-		if ($this->form_validation->run() == FALSE) {   
+		if ($this->form_validation->run() == FALSE) {
 			echo json_encode($this->form_validation->error_array());
-		}else{    
+		}else{
 
 			$returnValue = array();
-			
+
 			$returnValue['quantity'] = $quantity;
 			$returnValue['unitCode'] = $unitCode;
 			$returnValue['assetName'] = $assetName;
 
 			$returnValue['success'] = 1;
 			echo json_encode($returnValue);
-			
-		}	
+
+		}
 
 	}
 
-
+//inserting values for suppliername, displaying error if no values inputted
 	public function validateSupplierNameASRS() {
 
 		$this->form_validation->set_rules('supplierName', 'Supplier Name', 'required');
-		$this->form_validation->set_rules('supplierNameText', 'Supplier Name Text', 'required');  
+		$this->form_validation->set_rules('supplierNameText', 'Supplier Name Text', 'required');
 
 		$supplierName = $_POST["supplierName"];
 		$supplierNameText = $_POST["supplierNameText"];
@@ -255,27 +256,27 @@ class trinityDataPurchasing extends MY_Controller {
 		$this->session->set_flashdata('supplierNameText', $supplierNameText);
 
 
-		if ($this->form_validation->run() == FALSE) {   
+		if ($this->form_validation->run() == FALSE) {
 			echo json_encode($this->form_validation->error_array());
-		}else{    
+		}else{
 
 			$returnValue = array();
-			
+
 			$returnValue['supplierName'] = $supplierName;
 			$returnValue['supplierNameText'] = $supplierNameText;
 
 			$returnValue['success'] = 1;
 			echo json_encode($returnValue);
-			
-		}	
+
+		}
 
 	}
-		
 
+ //inserting values for pbac member unit and displaying error if novalues inputted
 	public function validatePBACMemberASRS() {
 
 		$this->form_validation->set_rules('pbacUnit', 'PBAC Member Unit', 'required');
-		$this->form_validation->set_rules('pbacUnitText', 'PBAC Member Unit', 'required');  
+		$this->form_validation->set_rules('pbacUnitText', 'PBAC Member Unit', 'required');
 
 		$pbacUnit = $_POST["pbacUnit"];
 		$pbacUnitText = $_POST["pbacUnitText"];
@@ -284,22 +285,22 @@ class trinityDataPurchasing extends MY_Controller {
 		$this->session->set_flashdata('pbacUnitText', $pbacUnitText);
 
 
-		if ($this->form_validation->run() == FALSE) {   
+		if ($this->form_validation->run() == FALSE) {
 			echo json_encode($this->form_validation->error_array());
-		}else{    
+		}else{
 
 			$returnValue = array();
-			
+
 			$returnValue['pbacUnit'] = $pbacUnit;
 			$returnValue['pbacUnitText'] = $pbacUnitText;
 
 			$returnValue['success'] = 1;
 			echo json_encode($returnValue);
-			
-		}	
+
+		}
 
 	}
-		
+//inserting values for requested item and for checking if it has data
 	public function insertRequestItemsASRS() {
 		$ID = $_POST["ID"];
 		$quantity = $_POST["quantity"];
@@ -307,13 +308,13 @@ class trinityDataPurchasing extends MY_Controller {
 		$assetName = $_POST["assetName"];
 		$unitCodeText = $_POST["unitCodeText"];
 		$assetNameText = $_POST["assetNameText"];
-		
+
 		$uct = explode(";", $assetName);
 
 		$assetGroupCd =  null;
 		$assetSubGroupCd =  null;
 		$assetCompGroupCd =  null;
-		
+
 		if(count($uct) > 1) {
 			$assetGroupCd =  $uct[0];
 			$assetSubGroupCd =  $uct[1];
@@ -322,18 +323,18 @@ class trinityDataPurchasing extends MY_Controller {
 			$assetGroupCd =  'FA';
 			$assetSubGroupCd =  null;
 			$assetCompGroupCd =  null;
-			
+
 		}
-			
+//inserting values for username, if username exist it displays the requested items of the user
 		$userName = $this->_getUserName(1);
 
-		$transactionExist = $this->_getRecordsData($data = array('requestNumber'), 
-		$tables = array('triune_job_request_transaction_asrs_items'), 
-		$fieldName = array('requestNumber', 'assetName'), 
-		$where = array($ID, $assetNameText), 
-		$join = null, $joinType = null, $sortBy = null, $sortOrder = null, 
+		$transactionExist = $this->_getRecordsData($data = array('requestNumber'),
+		$tables = array('triune_job_request_transaction_asrs_items'),
+		$fieldName = array('requestNumber', 'assetName'),
+		$where = array($ID, $assetNameText),
+		$join = null, $joinType = null, $sortBy = null, $sortOrder = null,
 		$limit = null, 	$fieldNameLike = null, $like = null, $whereSpecial = null, $groupBy = null );
-		
+
 
 		if(empty($transactionExist)) {
 
@@ -356,11 +357,11 @@ class trinityDataPurchasing extends MY_Controller {
 				'workstationID' => $this->_getIPAddress(),
 				'timeStamp' => $this->_getTimeStamp(),
 				'updatedBy' => $userName,
-			
-			);				 
 
+			);
+// if no data exists new transaction will display, if no values input transaction failed
 			$this->db->trans_start();
-			$insertedRecord1 =$this->_insertRecords($tableName = 'triune_job_request_transaction_asrs_items', $insertData1);        			 
+			$insertedRecord1 =$this->_insertRecords($tableName = 'triune_job_request_transaction_asrs_items', $insertData1);
 
 
 				$actionName1 = "Insert New Transaction Request";
@@ -368,10 +369,10 @@ class trinityDataPurchasing extends MY_Controller {
 				$oldValue1 = null;
 				$newValue1 =  $insertData1;
 				$userType = 1;
-				$this->_insertAuditTrail($actionName1, $systemForAuditName, $moduleName, $for1, $oldValue1, $newValue1, $userType);		
+				$this->_insertAuditTrail($actionName1, $systemForAuditName, $moduleName, $for1, $oldValue1, $newValue1, $userType);
 
 			$this->db->trans_complete();
-		
+
 			$fileName1 = "triune_job_request_transaction_asrs_items-" . $this->_getCurrentDate();
 			$text1 = "INSERT INTO triune_job_request_transaction_asrs_items ";
 			$text1 = $text1 .  "VALUES (" .  $insertedRecord1 . ", ";
@@ -393,13 +394,13 @@ class trinityDataPurchasing extends MY_Controller {
 
 			if($this->db->trans_status() === FALSE) {
 				$this->_transactionFailed();
-				return FALSE;  
-			} 
+				return FALSE;
+			}
 
-                 /*   $message = '';                     
+                 /*   $message = '';
                     $message .= '<strong>Request from user</strong>' . $userName . '<br>';
- 
-					
+
+
 					$emailSent = $this->_sendMail($toEmail = 'rdlagdaan@tua.edu.ph', $subject = "Email Notification from" . $userName, $message);
                     if(!$emailSent) {
                         //$this->session->set_flashdata('emailSent', '1');
@@ -409,10 +410,10 @@ class trinityDataPurchasing extends MY_Controller {
                         //redirect(base_url().'user-acct/sign-up');
 
                     }*/
-			
-			
+
+
 			$returnValue = array();
-			
+
 
 			$returnValue['ID'] = $ID;
 			$returnValue['success'] = 1;
@@ -423,34 +424,34 @@ class trinityDataPurchasing extends MY_Controller {
 			$returnValue = array();
 			$returnValue['success'] = 0;
 			echo json_encode($returnValue);
-		
+
 		}
 	}
-	
 
 
+//for creating data for the supplier,if supplier exists. display information if the supplier. if not goes to REQUESTSUPPLIERCREATE
 	public function insertSupplierNameASRS() {
 		$ID = $_POST["ID"];
 		$supplierID = $_POST["supplierID"];
 		$supplierName = $_POST["supplierName"];
 		$requestStatus = $_POST["requestStatus"];
-		$supplierBidStatus = 'CAN';		
-			
+		$supplierBidStatus = 'CAN';
+
 		$userName = $this->_getUserName(1);
 
-		$transactionExist = $this->_getRecordsData($data = array('requestNumber'), 
-		$tables = array('triune_job_request_transaction_asrs_supplier'), 
-		$fieldName = array('requestNumber', 'supplierID'), 
-		$where = array($ID, $supplierID), 
-		$join = null, $joinType = null, $sortBy = null, $sortOrder = null, 
+		$transactionExist = $this->_getRecordsData($data = array('requestNumber'),
+		$tables = array('triune_job_request_transaction_asrs_supplier'),
+		$fieldName = array('requestNumber', 'supplierID'),
+		$where = array($ID, $supplierID),
+		$join = null, $joinType = null, $sortBy = null, $sortOrder = null,
 		$limit = null, 	$fieldNameLike = null, $like = null, $whereSpecial = null, $groupBy = null );
-		
+
 
 		if(empty($transactionExist)) {
 
 			$details = $this->_getTransactionDetails($ID, $from = 'triune_job_request_transaction_asrs');
-		
-		
+
+
 			$systemForAuditName = "ASRS";
 			$moduleName = "REQUESTSUPPLIERCREATE";
 
@@ -467,12 +468,12 @@ class trinityDataPurchasing extends MY_Controller {
 				'workstationID' => $this->_getIPAddress(),
 				'timeStamp' => $this->_getTimeStamp(),
 				'updatedBy' => $userName,
-				
-				
-			);				 
 
+
+			);
+//starting of transaction for the supplier after creating and send email to rdlagdaan@tua.edu.ph for the information of the transaction
 			$this->db->trans_start();
-			$insertedRecord1 =$this->_insertRecords($tableName = 'triune_job_request_transaction_asrs_supplier', $insertData1);        			 
+			$insertedRecord1 =$this->_insertRecords($tableName = 'triune_job_request_transaction_asrs_supplier', $insertData1);
 
 
 				$actionName1 = "Insert Supplier Name";
@@ -480,10 +481,10 @@ class trinityDataPurchasing extends MY_Controller {
 				$oldValue1 = null;
 				$newValue1 =  $insertData1;
 				$userType = 1;
-				$this->_insertAuditTrail($actionName1, $systemForAuditName, $moduleName, $for1, $oldValue1, $newValue1, $userType);		
+				$this->_insertAuditTrail($actionName1, $systemForAuditName, $moduleName, $for1, $oldValue1, $newValue1, $userType);
 
 			$this->db->trans_complete();
-		
+
 			$fileName1 = "triune_job_request_transaction_asrs_supplier-" . $this->_getCurrentDate();
 			$text1 = "INSERT INTO triune_job_request_transaction_asrs_supplier ";
 			$text1 = $text1 .  "VALUES (" .  $insertedRecord1 . ", ";
@@ -502,13 +503,13 @@ class trinityDataPurchasing extends MY_Controller {
 
 			if($this->db->trans_status() === FALSE) {
 				$this->_transactionFailed();
-				return FALSE;  
-			} 
+				return FALSE;
+			}
 
-                 /*   $message = '';                     
+                 /*   $message = '';
                     $message .= '<strong>Request from user</strong>' . $userName . '<br>';
- 
-					
+
+
 					$emailSent = $this->_sendMail($toEmail = 'rdlagdaan@tua.edu.ph', $subject = "Email Notification from" . $userName, $message);
                     if(!$emailSent) {
                         //$this->session->set_flashdata('emailSent', '1');
@@ -518,10 +519,10 @@ class trinityDataPurchasing extends MY_Controller {
                         //redirect(base_url().'user-acct/sign-up');
 
                     }*/
-			
-			
+
+
 			$returnValue = array();
-			
+
 
 			$returnValue['ID'] = $ID;
 			$returnValue['success'] = 1;
@@ -532,31 +533,31 @@ class trinityDataPurchasing extends MY_Controller {
 			$returnValue = array();
 			$returnValue['success'] = 0;
 			echo json_encode($returnValue);
-		
+
 		}
 	}
 
-
+//if pbacmember start transaction for pbacunit. if not a member goes to REQUESTPBACMEMBERCREATE
 	public function insertPBACMemberASRS() {
 		$ID = $_POST["ID"];
 		$pbacUnit = $_POST["pbacUnit"];
 		$requestStatus = $_POST["requestStatus"];
-			
+
 		$userName = $this->_getUserName(1);
 
-		$transactionExist = $this->_getRecordsData($data = array('requestNumber'), 
-		$tables = array('triune_job_request_transaction_asrs_bidding_member'), 
-		$fieldName = array('requestNumber', 'pbacUnit'), 
-		$where = array($ID, $pbacUnit), 
-		$join = null, $joinType = null, $sortBy = null, $sortOrder = null, 
+		$transactionExist = $this->_getRecordsData($data = array('requestNumber'),
+		$tables = array('triune_job_request_transaction_asrs_bidding_member'),
+		$fieldName = array('requestNumber', 'pbacUnit'),
+		$where = array($ID, $pbacUnit),
+		$join = null, $joinType = null, $sortBy = null, $sortOrder = null,
 		$limit = null, 	$fieldNameLike = null, $like = null, $whereSpecial = null, $groupBy = null );
 
 
 		if(empty($transactionExist)) {
 
 			$details = $this->_getTransactionDetails($ID, $from = 'triune_job_request_transaction_asrs');
-		
-		
+
+
 			$systemForAuditName = "ASRS";
 			$moduleName = "REQUESTPBACMEMBERCREATE";
 
@@ -571,10 +572,10 @@ class trinityDataPurchasing extends MY_Controller {
 				'workstationID' => $this->_getIPAddress(),
 				'timeStamp' => $this->_getTimeStamp(),
 				'updatedBy' => $userName,
-			);				 
-
+			);
+//inserting records for bidding member, and sends email of the information to rdlagdaan@tua.edu.ph
 			$this->db->trans_start();
-			$insertedRecord1 =$this->_insertRecords($tableName = 'triune_job_request_transaction_asrs_bidding_member', $insertData1);        			 
+			$insertedRecord1 =$this->_insertRecords($tableName = 'triune_job_request_transaction_asrs_bidding_member', $insertData1);
 
 
 				$actionName1 = "Insert PBAC Member";
@@ -582,10 +583,10 @@ class trinityDataPurchasing extends MY_Controller {
 				$oldValue1 = null;
 				$newValue1 =  $insertData1;
 				$userType = 1;
-				$this->_insertAuditTrail($actionName1, $systemForAuditName, $moduleName, $for1, $oldValue1, $newValue1, $userType);		
+				$this->_insertAuditTrail($actionName1, $systemForAuditName, $moduleName, $for1, $oldValue1, $newValue1, $userType);
 
 			$this->db->trans_complete();
-		
+
 			$fileName1 = "triune_job_request_transaction_asrs_bidding_member-" . $this->_getCurrentDate();
 			$text1 = "INSERT INTO triune_job_request_transaction_asrs_bidding_member ";
 			$text1 = $text1 .  "VALUES (" .  $insertedRecord1 . ", ";
@@ -602,13 +603,13 @@ class trinityDataPurchasing extends MY_Controller {
 
 			if($this->db->trans_status() === FALSE) {
 				$this->_transactionFailed();
-				return FALSE;  
-			} 
+				return FALSE;
+			}
 
-                 /*   $message = '';                     
+                 /*   $message = '';
                     $message .= '<strong>Request from user</strong>' . $userName . '<br>';
- 
-					
+
+
 					$emailSent = $this->_sendMail($toEmail = 'rdlagdaan@tua.edu.ph', $subject = "Email Notification from" . $userName, $message);
                     if(!$emailSent) {
                         //$this->session->set_flashdata('emailSent', '1');
@@ -618,10 +619,10 @@ class trinityDataPurchasing extends MY_Controller {
                         //redirect(base_url().'user-acct/sign-up');
 
                     }*/
-			
-			
+
+
 			$returnValue = array();
-			
+
 
 			$returnValue['ID'] = $ID;
 			$returnValue['success'] = 1;
@@ -632,11 +633,11 @@ class trinityDataPurchasing extends MY_Controller {
 			$returnValue = array();
 			$returnValue['success'] = 0;
 			echo json_encode($returnValue);
-		
+
 		}
 	}
 
-	
+//inputting ID and request ID for deleting dataon requesteditem
 	public function deleteRequestItemsASRS() {
 		$ID = $_POST["ID"];
 		$requestID = $_POST["requestID"];
@@ -651,9 +652,9 @@ class trinityDataPurchasing extends MY_Controller {
 			$where = array($ID);
 			$fieldName = array('ID');
 			//DELETE ITEMS
-			
+
 			$this->db->trans_start();
-				$insertedRecord1 = $this->_deleteRecords('triune_job_request_transaction_asrs_items', $fieldName, $where);       			 
+				$insertedRecord1 = $this->_deleteRecords('triune_job_request_transaction_asrs_items', $fieldName, $where);
 
 
 				$actionName1 = "Delete ASRS Item";
@@ -661,10 +662,10 @@ class trinityDataPurchasing extends MY_Controller {
 				$oldValue1 = $ID . ";" . $requestID;
 				$newValue1 =  null;
 				$userType = 1;
-				$this->_insertAuditTrail($actionName1, $systemForAuditName, $moduleName, $for1, $oldValue1, $newValue1, $userType);		
+				$this->_insertAuditTrail($actionName1, $systemForAuditName, $moduleName, $for1, $oldValue1, $newValue1, $userType);
 
 			$this->db->trans_complete();
-		
+
 			/*$fileName1 = "triune_job_request_transaction_asrs_items-" . $this->_getCurrentDate();
 			$text1 = "INSERT INTO triune_job_request_transaction_asrs_items ";
 			$text1 = $text1 .  "VALUES (" .  $insertedRecord1 . ", ";
@@ -685,13 +686,13 @@ class trinityDataPurchasing extends MY_Controller {
 
 			if($this->db->trans_status() === FALSE) {
 				$this->_transactionFailed();
-				return FALSE;  
-			} 
+				return FALSE;
+			}
 
-                 /*   $message = '';                     
+                 /*   $message = '';
                     $message .= '<strong>Request from user</strong>' . $userName . '<br>';
- 
-					
+
+
 					$emailSent = $this->_sendMail($toEmail = 'rdlagdaan@tua.edu.ph', $subject = "Email Notification from" . $userName, $message);
                     if(!$emailSent) {
                         //$this->session->set_flashdata('emailSent', '1');
@@ -701,17 +702,17 @@ class trinityDataPurchasing extends MY_Controller {
                         //redirect(base_url().'user-acct/sign-up');
 
                     }*/
-			
-			
+
+
 			$returnValue = array();
-			
+
 
 			$returnValue['ID'] = $requestID;
 			$returnValue['success'] = 1;
 			echo json_encode($returnValue);
 
-	}	
-
+	}
+//for deleting information of the supplier
 	public function deleteSupplierNamesASRS() {
 		$ID = $_POST["ID"];
 		$requestID = $_POST["requestID"];
@@ -726,9 +727,9 @@ class trinityDataPurchasing extends MY_Controller {
 			$where = array($ID);
 			$fieldName = array('ID');
 			//DELETE ITEMS
-			
+
 			$this->db->trans_start();
-				$insertedRecord1 = $this->_deleteRecords('triune_job_request_transaction_asrs_supplier', $fieldName, $where);       			 
+				$insertedRecord1 = $this->_deleteRecords('triune_job_request_transaction_asrs_supplier', $fieldName, $where);
 
 
 				$actionName1 = "Delete ASRS Supplier Name";
@@ -736,10 +737,10 @@ class trinityDataPurchasing extends MY_Controller {
 				$oldValue1 = $ID . ";" . $requestID;
 				$newValue1 =  null;
 				$userType = 1;
-				$this->_insertAuditTrail($actionName1, $systemForAuditName, $moduleName, $for1, $oldValue1, $newValue1, $userType);		
+				$this->_insertAuditTrail($actionName1, $systemForAuditName, $moduleName, $for1, $oldValue1, $newValue1, $userType);
 
 			$this->db->trans_complete();
-		
+
 			/*$fileName1 = "triune_job_request_transaction_asrs_items-" . $this->_getCurrentDate();
 			$text1 = "INSERT INTO triune_job_request_transaction_asrs_items ";
 			$text1 = $text1 .  "VALUES (" .  $insertedRecord1 . ", ";
@@ -760,13 +761,13 @@ class trinityDataPurchasing extends MY_Controller {
 
 			if($this->db->trans_status() === FALSE) {
 				$this->_transactionFailed();
-				return FALSE;  
-			} 
+				return FALSE;
+			}
 
-                 /*   $message = '';                     
+                 /*   $message = '';
                     $message .= '<strong>Request from user</strong>' . $userName . '<br>';
- 
-					
+
+
 					$emailSent = $this->_sendMail($toEmail = 'rdlagdaan@tua.edu.ph', $subject = "Email Notification from" . $userName, $message);
                     if(!$emailSent) {
                         //$this->session->set_flashdata('emailSent', '1');
@@ -776,18 +777,18 @@ class trinityDataPurchasing extends MY_Controller {
                         //redirect(base_url().'user-acct/sign-up');
 
                     }*/
-			
-			
+
+
 			$returnValue = array();
-			
+
 
 			$returnValue['ID'] = $requestID;
 			$returnValue['success'] = 1;
 			echo json_encode($returnValue);
 
-	}	
-	
-	
+	}
+
+//for deleting ASRS PBACMEMBER informations/data
 	public function deletePBACMemberASRS() {
 		$ID = $_POST["ID"];
 		$requestID = $_POST["requestID"];
@@ -802,9 +803,9 @@ class trinityDataPurchasing extends MY_Controller {
 			$where = array($ID);
 			$fieldName = array('ID');
 			//DELETE ITEMS
-			
+
 			$this->db->trans_start();
-				$insertedRecord1 = $this->_deleteRecords('triune_job_request_transaction_asrs_bidding_member', $fieldName, $where);       			 
+				$insertedRecord1 = $this->_deleteRecords('triune_job_request_transaction_asrs_bidding_member', $fieldName, $where);
 
 
 				$actionName1 = "Delete ASRS PBAC Member";
@@ -812,10 +813,10 @@ class trinityDataPurchasing extends MY_Controller {
 				$oldValue1 = $ID . ";" . $requestID;
 				$newValue1 =  null;
 				$userType = 1;
-				$this->_insertAuditTrail($actionName1, $systemForAuditName, $moduleName, $for1, $oldValue1, $newValue1, $userType);		
+				$this->_insertAuditTrail($actionName1, $systemForAuditName, $moduleName, $for1, $oldValue1, $newValue1, $userType);
 
 			$this->db->trans_complete();
-		
+
 			/*$fileName1 = "triune_job_request_transaction_asrs_items-" . $this->_getCurrentDate();
 			$text1 = "INSERT INTO triune_job_request_transaction_asrs_items ";
 			$text1 = $text1 .  "VALUES (" .  $insertedRecord1 . ", ";
@@ -836,13 +837,13 @@ class trinityDataPurchasing extends MY_Controller {
 
 			if($this->db->trans_status() === FALSE) {
 				$this->_transactionFailed();
-				return FALSE;  
-			} 
+				return FALSE;
+			}
 
-                 /*   $message = '';                     
+                 /*   $message = '';
                     $message .= '<strong>Request from user</strong>' . $userName . '<br>';
- 
-					
+
+
 					$emailSent = $this->_sendMail($toEmail = 'rdlagdaan@tua.edu.ph', $subject = "Email Notification from" . $userName, $message);
                     if(!$emailSent) {
                         //$this->session->set_flashdata('emailSent', '1');
@@ -852,53 +853,53 @@ class trinityDataPurchasing extends MY_Controller {
                         //redirect(base_url().'user-acct/sign-up');
 
                     }*/
-			
-			
+
+
 			$returnValue = array();
-			
+
 
 			$returnValue['ID'] = $requestID;
 			$returnValue['success'] = 1;
 			echo json_encode($returnValue);
 
-	}	
-	
-	
+	}
+
+//showing the lists of transactions and request status
     public function getMyRequestListASRS() {
-		$post = $this->input->post();  
+		$post = $this->input->post();
 		$clean = $this->security->xss_clean($post);
-		
+
 		$page = isset($clean['page']) ? intval($clean['page']) : 1;
 		$rows = isset($clean['rows']) ? intval($clean['rows']) : 10;
 		$ID = isset($clean['ID']) ? $clean['ID'] : '';
 		$requestStatus = isset($clean['requestStatus']) ? $clean['requestStatus'] : '';
 		$userName = $this->_getUserName(1);
-		 
+
 		$offset = ($page-1)*$rows;
 		$result = array();
-		$whereSpcl = "triune_job_request_transaction_asrs.userName = '$userName'"; 
-		$whereSpcl =  $whereSpcl . " and triune_job_request_transaction_asrs.ID like '$ID%'"; 
+		$whereSpcl = "triune_job_request_transaction_asrs.userName = '$userName'";
+		$whereSpcl =  $whereSpcl . " and triune_job_request_transaction_asrs.ID like '$ID%'";
 		$whereSpcl =  $whereSpcl . " and triune_job_request_transaction_asrs.requestStatus like '$requestStatus%'";
-	 
-		$results = $this->_getRecordsData($data = array('count(*) as totalRecs'), 
-			$tables = array('triune_job_request_transaction_asrs'), $fieldName = null, $where = null, $join = null, $joinType = null, 
-			$sortBy = null, $sortOrder = null, $limit = null, 
-			$fieldNameLike = null, $like = null, 
+
+		$results = $this->_getRecordsData($data = array('count(*) as totalRecs'),
+			$tables = array('triune_job_request_transaction_asrs'), $fieldName = null, $where = null, $join = null, $joinType = null,
+			$sortBy = null, $sortOrder = null, $limit = null,
+			$fieldNameLike = null, $like = null,
 			$whereSpecial = array($whereSpcl), $groupBy = null );
 
 			//$row = mysql_fetch_row($results);
 			$result["total"] = intval($results[0]->totalRecs);
 
-			$results = $this->_getRecordsData($data = array('triune_job_request_transaction_asrs.*', 'triune_request_status_reference.requestStatusDescription'), 
-			$tables = array('triune_job_request_transaction_asrs', 'triune_request_status_reference'), 
-			$fieldName = array('triune_request_status_reference.application'), $where = array('ASRS'), 
-			$join = array('triune_job_request_transaction_asrs.requestStatus = triune_request_status_reference.requestStatusCode'), 
-			$joinType = array('left'), 
-			$sortBy = array('triune_job_request_transaction_asrs.ID'), $sortOrder = array('desc'), 
-			$limit = array($rows, $offset), 
-			$fieldNameLike = null, $like = null, 
+			$results = $this->_getRecordsData($data = array('triune_job_request_transaction_asrs.*', 'triune_request_status_reference.requestStatusDescription'),
+			$tables = array('triune_job_request_transaction_asrs', 'triune_request_status_reference'),
+			$fieldName = array('triune_request_status_reference.application'), $where = array('ASRS'),
+			$join = array('triune_job_request_transaction_asrs.requestStatus = triune_request_status_reference.requestStatusCode'),
+			$joinType = array('left'),
+			$sortBy = array('triune_job_request_transaction_asrs.ID'), $sortOrder = array('desc'),
+			$limit = array($rows, $offset),
+			$fieldNameLike = null, $like = null,
 			$whereSpecial = array($whereSpcl), $groupBy = null );
-			
+
 			$result["rows"] = $results;
 
 			$result["ID"] = $ID;
@@ -907,11 +908,11 @@ class trinityDataPurchasing extends MY_Controller {
 	}
 
 
-
+ //getting the list for employee data and transaction request status
     public function getRequestListASRS() {
-		$post = $this->input->post();  
+		$post = $this->input->post();
 		$clean = $this->security->xss_clean($post);
-		
+
 		$page = isset($clean['page']) ? intval($clean['page']) : 1;
 		$rows = isset($clean['rows']) ? intval($clean['rows']) : 10;
 		$ID = isset($clean['ID']) ? $clean['ID'] : '';
@@ -922,20 +923,20 @@ class trinityDataPurchasing extends MY_Controller {
 		$result = array();
 
 		$results2 = null;
-		$whereSpcl = null;	
-		$departmentUnit = null;	
+		$whereSpcl = null;
+		$departmentUnit = null;
 
 		$currentUser = $this->_getUserName(1);
 
-		$results2 = $this->_getRecordsData($rec = array('triune_employee_data.*'), 
-		$tables = array('triune_user', 'triune_employee_data'), 
-		$fieldName = array('triune_user.userName'), $where = array($currentUser), 
-		$join = array('triune_user.userNumber = triune_employee_data.employeeNumber'), $joinType = array('left'), $sortBy = null, $sortOrder = null, 
-		$limit = null, 	$fieldNameLike = null, $like = null, $whereSpecial = null, 
+		$results2 = $this->_getRecordsData($rec = array('triune_employee_data.*'),
+		$tables = array('triune_user', 'triune_employee_data'),
+		$fieldName = array('triune_user.userName'), $where = array($currentUser),
+		$join = array('triune_user.userNumber = triune_employee_data.employeeNumber'), $joinType = array('left'), $sortBy = null, $sortOrder = null,
+		$limit = null, 	$fieldNameLike = null, $like = null, $whereSpecial = null,
 		$groupBy = null );
 
 		$departmentUnit = $results2[0]->currentDepartment;
-		
+
 		if($requestStatus == 'A') {
 			$whereSpcl = "triune_job_request_transaction_asrs.requestStatus = '$requestStatus'";
 			$whereSpcl = $whereSpcl . " and triune_job_request_transaction_asrs.departmentUnit = '$departmentUnit'";
@@ -950,31 +951,31 @@ class trinityDataPurchasing extends MY_Controller {
 			$whereSpcl = "triune_job_request_transaction_asrs.requestStatus = '$requestStatus'";
 			$whereSpcl = $whereSpcl . " and triune_job_request_transaction_asrs.ID like '$ID%'";
 			$whereSpcl = $whereSpcl . " and triune_job_request_transaction_asrs.userName like '$userName%'";
-			
+
 		}
 
 
 
-	 
-		$results = $this->_getRecordsData($data = array('count(*) as totalRecs'), 
-			$tables = array('triune_job_request_transaction_asrs'), $fieldName = null, $where = null, $join = null, $joinType = null, 
-			$sortBy = null, $sortOrder = null, $limit = null, 
-			$fieldNameLike = null, $like = null, 
+//getting records of request transaction and request status
+		$results = $this->_getRecordsData($data = array('count(*) as totalRecs'),
+			$tables = array('triune_job_request_transaction_asrs'), $fieldName = null, $where = null, $join = null, $joinType = null,
+			$sortBy = null, $sortOrder = null, $limit = null,
+			$fieldNameLike = null, $like = null,
 			$whereSpecial = array($whereSpcl), $groupBy = null );
 
 			//$row = mysql_fetch_row($results);
 			$result["total"] = intval($results[0]->totalRecs);
 
-			$results = $this->_getRecordsData($data = array('triune_job_request_transaction_asrs.*', 'triune_request_status_reference.requestStatusDescription'), 
-			$tables = array('triune_job_request_transaction_asrs', 'triune_request_status_reference'), 
-			$fieldName = array('triune_request_status_reference.application'), $where = array('ASRS'), 
-			$join = array('triune_job_request_transaction_asrs.requestStatus = triune_request_status_reference.requestStatusCode'), 
-			$joinType = array('left'), 
-			$sortBy = array('triune_job_request_transaction_asrs.ID'), $sortOrder = array('desc'), 
-			$limit = array($rows, $offset), 
-			$fieldNameLike = null, $like = null, 
+			$results = $this->_getRecordsData($data = array('triune_job_request_transaction_asrs.*', 'triune_request_status_reference.requestStatusDescription'),
+			$tables = array('triune_job_request_transaction_asrs', 'triune_request_status_reference'),
+			$fieldName = array('triune_request_status_reference.application'), $where = array('ASRS'),
+			$join = array('triune_job_request_transaction_asrs.requestStatus = triune_request_status_reference.requestStatusCode'),
+			$joinType = array('left'),
+			$sortBy = array('triune_job_request_transaction_asrs.ID'), $sortOrder = array('desc'),
+			$limit = array($rows, $offset),
+			$fieldNameLike = null, $like = null,
 			$whereSpecial = array($whereSpcl), $groupBy = null );
-			
+
 			$result["rows"] = $results;
 			$result["departmentUnit"] = $departmentUnit;
 
@@ -984,11 +985,11 @@ class trinityDataPurchasing extends MY_Controller {
 			echo json_encode($result);
 	}
 
-
+//updating request status
 	public function updateRequestASRS() {
-		$post = $this->input->post();  
+		$post = $this->input->post();
 		$clean = $this->security->xss_clean($post);
-		
+
 		$ID =  $clean['ID'];
 		$requestStatus =  $clean['requestStatus'];
 		$specialInstructions = $clean['specialInstructions'];
@@ -1000,16 +1001,16 @@ class trinityDataPurchasing extends MY_Controller {
 		$supplierBidStatus =  null;
 		$itemAmount = null;
 		$itemID =  null;
-		$orgUnitCode = null;		
+		$orgUnitCode = null;
 		$returnedFrom = isset($clean['returnedFrom']) ? $clean['returnedFrom'] : null;
 		$actualBudgetAmount = null;
-		
+
 		if($requestStatus == 'S') {
 			if((strlen($returnedFrom) < 1)) {
-				$requestCategory = isset($clean['requestCategory']) ? $clean['requestCategory'] : null; 
+				$requestCategory = isset($clean['requestCategory']) ? $clean['requestCategory'] : null;
 				$requestCategoryText =  isset($clean['requestCategoryText']) ? $clean['requestCategoryText'] : null;
-				$currentSupplier = isset($clean['currentSupplier']) ? $clean['currentSupplier'] : null; 
-				$currentSupplierText =  isset($clean['currentSupplierText']) ? $clean['currentSupplierText'] : null; 
+				$currentSupplier = isset($clean['currentSupplier']) ? $clean['currentSupplier'] : null;
+				$currentSupplierText =  isset($clean['currentSupplierText']) ? $clean['currentSupplierText'] : null;
 				$supplierBidStatus =  'CUR';
 			}
 		}
@@ -1025,8 +1026,8 @@ class trinityDataPurchasing extends MY_Controller {
 		if($requestStatus == 'I') {
 			$actualBudgetAmount =  $clean['actualBudgetAmount'];
 		}
-		
-		
+
+//inserting username for REQUESTUPDATE
 		$userName = $this->_getUserName(1);
 
 
@@ -1037,7 +1038,7 @@ class trinityDataPurchasing extends MY_Controller {
 			$moduleName0 = "REQUESTUPDATE";
 
 			$requestStatusUpdate = null;
-			
+
 			if($requestStatus == 'U') {
 				$requestStatusUpdate = array(
 					'requestStatus' => $requestStatus,
@@ -1048,23 +1049,23 @@ class trinityDataPurchasing extends MY_Controller {
 					'requestStatus' => $requestStatus,
 					'returnedFrom' => $returnedFrom,
 				);
-				
+
 			} else {
 				$requestStatusUpdate = array(
 					'requestStatus' => $requestStatus,
 				);
-			}	
-
-			$this->_updateRecords($tableName = 'triune_job_request_transaction_asrs', 
-			$fieldName = array('ID'), 
+			}
+//updating request transaction to from file triune_job_request_transaction_asrs
+			$this->_updateRecords($tableName = 'triune_job_request_transaction_asrs',
+			$fieldName = array('ID'),
 			$where = array($ID), $requestStatusUpdate);
-			
+
 			$actionName0 = "Update Transaction Request to: " . $requestStatus;
 			$for0 = $ID . ";" . $userName;
 			$oldValue0 = null;
 			$newValue0 =  $requestStatusUpdate;
 			$userType = 1;
-			$this->_insertAuditTrail($actionName0, $systemForAuditName0, $moduleName0, $for0, $oldValue0, $newValue0, $userType);		
+			$this->_insertAuditTrail($actionName0, $systemForAuditName0, $moduleName0, $for0, $oldValue0, $newValue0, $userType);
 
 			$fileName0 = "triune_job_request_transaction_asrs-" . $this->_getCurrentDate();
 			$text0 = "UPDATE triune_job_request_transaction_asrs ";
@@ -1079,16 +1080,17 @@ class trinityDataPurchasing extends MY_Controller {
 			//--------------UPDATE REQUEST STATUS-------------------
 
 
-
+//gets the details of updated transaction request
 			$details = $this->_getTransactionDetails($ID, $from = 'triune_job_request_transaction_asrs');
 
 
 			//--------------UPDATE REQUEST STATATUS HISTORY-------------------
+
 			$systemForAuditName1 = "ASRS";
 			$moduleName1 = "REQUESTSTATUSHISTORY";
 
 			$insertData1 = null;
-
+// input value "S" to update REQUESTSTATUSHISTORY
 			if( ($requestStatus == 'S') && ((strlen($returnedFrom)) > 0) ){
 				$insertData1 = array(
 					'requestNumber' =>$ID,
@@ -1098,8 +1100,8 @@ class trinityDataPurchasing extends MY_Controller {
 					'workstationID' => $this->_getIPAddress(),
 					'timeStamp' => $this->_getTimeStamp(),
 					'updatedBy' => $userName,
-					
-				);			
+
+				);
 			} else {
 				$insertData1 = array(
 					'requestNumber' =>$ID,
@@ -1108,12 +1110,12 @@ class trinityDataPurchasing extends MY_Controller {
 					'workstationID' => $this->_getIPAddress(),
 					'timeStamp' => $this->_getTimeStamp(),
 					'updatedBy' => $userName,
-					
-				);			
-				
-			}
 
-			$this->_insertRecords($tableName = 'triune_job_request_transaction_asrs_status_history', $insertData1);        			 
+				);
+
+			}
+//insert records of updated requesthistorystatus to file triune_job_request_transaction_asrs_status_history
+			$this->_insertRecords($tableName = 'triune_job_request_transaction_asrs_status_history', $insertData1);
 
 
 			$actionName1 = "Update Request Status History with: " . $requestStatus;
@@ -1121,7 +1123,7 @@ class trinityDataPurchasing extends MY_Controller {
 			$oldValue1 = null;
 			$newValue1 =  $insertData1;
 			$userType = 1;
-			$this->_insertAuditTrail($actionName1, $systemForAuditName1, $moduleName1, $for1, $oldValue1, $newValue1, $userType);		
+			$this->_insertAuditTrail($actionName1, $systemForAuditName1, $moduleName1, $for1, $oldValue1, $newValue1, $userType);
 
 			$fileName1 = "triune_job_request_transaction_asrs_status_history-" . $this->_getCurrentDate();
 			$text1 = "INSERT INTO triune_job_request_transaction_asrs_status_history ";
@@ -1140,6 +1142,7 @@ class trinityDataPurchasing extends MY_Controller {
 
 
 			//--------------INSERT REQUEST SPECIAL INSTRUCTIONS-------------------
+			//inserting values for REQUESTSPECIALINSTRUCTIONS to data2
 			if( (strlen($specialInstructions)) > 0) {
 				$systemForAuditName2 = "ASRS";
 				$moduleName2 = "REQUESTSPECIALINSTRUCTIONS";
@@ -1149,8 +1152,8 @@ class trinityDataPurchasing extends MY_Controller {
 				if( ($requestStatus == 'S') && ((strlen($returnedFrom)) > 0) ){
 					$instrtnType = 'R';
 				}
-				
-				
+
+
 				$insertData2 = array(
 					'requestNumber' =>$ID,
 					'requestStatus' => $requestStatus,
@@ -1160,16 +1163,17 @@ class trinityDataPurchasing extends MY_Controller {
 					'workstationID' => $this->_getIPAddress(),
 					'timeStamp' => $this->_getTimeStamp(),
 					'updatedBy' => $userName,
-					
-				);				 
-				$this->_insertRecords($tableName = 'triune_job_request_transaction_asrs_special_instructions', $insertData2);        			 
+
+				);
+				//insert data inputted to file triune_job_request_transaction_asrs_special_instructions
+				$this->_insertRecords($tableName = 'triune_job_request_transaction_asrs_special_instructions', $insertData2);
 
 				$actionName2 = "Insert Request Special Instructions";
 				$for2 = $ID . ";" . $userName;
 				$oldValue2 = null;
 				$newValue2 =  $insertData2;
 				$userType = 1;
-				$this->_insertAuditTrail($actionName2, $systemForAuditName2, $moduleName2, $for2, $oldValue2, $newValue2, $userType);		
+				$this->_insertAuditTrail($actionName2, $systemForAuditName2, $moduleName2, $for2, $oldValue2, $newValue2, $userType);
 
 				$fileName2 = "triune_job_request_transaction_asrs_special_instructions-" . $this->_getCurrentDate();
 				$text2 = "INSERT INTO triune_job_request_transaction_asrs_special_instructions ";
@@ -1183,7 +1187,7 @@ class trinityDataPurchasing extends MY_Controller {
 				$text2 = $text2 .  "'".$userName . "'";
 				$text2 = $text2 . ");";
 				$this->_insertTextLog($fileName2, $text2, $this->LOGFOLDER);
-					
+
 
 			}
 			//--------------INSERT REQUEST SPECIAL INSTRUCTIONS-------------------
@@ -1192,7 +1196,7 @@ class trinityDataPurchasing extends MY_Controller {
 			//--------------INSERT REQUEST REQUEST NOTES-------------------
 			$systemForAuditName3 = "TBAMIMS";
 			$moduleName3 = "REQUESTREQUESTNOTES";
-
+//inputting values for requestnotes
 			if( (strlen($requestNotes)) > 0) {
 				$insertData3 = null;
 				$insertData3 = array(
@@ -1203,16 +1207,17 @@ class trinityDataPurchasing extends MY_Controller {
 					'workstationID' => $this->_getIPAddress(),
 					'timeStamp' => $this->_getTimeStamp(),
 					'updatedBy' => $userName,
-					
-				);				 
-				$this->_insertRecords($tableName = 'triune_job_request_transaction_asrs_request_notes', $insertData3);        			 
-				
+
+				);
+				//inserting the data of requestnotes to triune_job_request_transaction_asrs_request_notes
+				$this->_insertRecords($tableName = 'triune_job_request_transaction_asrs_request_notes', $insertData3);
+
 				$actionName3 = "Insert Request Request Notes";
 				$for3 = $ID . ";" . $userName;
 				$oldValue3 = null;
 				$newValue3 =  $insertData3;
 				$userType = 1;
-				$this->_insertAuditTrail($actionName3, $systemForAuditName3, $moduleName3, $for3, $oldValue3, $newValue3, $userType);		
+				$this->_insertAuditTrail($actionName3, $systemForAuditName3, $moduleName3, $for3, $oldValue3, $newValue3, $userType);
 
 				$fileName3 = "triune_job_request_transaction_asrs_request_notes-" . $this->_getCurrentDate();
 				$text3 = "INSERT INTO triune_job_request_transaction_asrs_request_notes ";
@@ -1228,8 +1233,9 @@ class trinityDataPurchasing extends MY_Controller {
 			}
 			//--------------INSERT REQUEST REQUEST NOTES-------------------
 
-			
+
 			//--------------INSERT REQUEST REQUEST CATEGORY-------------------
+			//inserting values for REQUESTCATEGORY
 			if( (strlen($requestCategory)) > 0) {
 				$systemForAuditName4 = "ASRS";
 				$moduleName4 = "REQUESTSREQUESTCATEGORY";
@@ -1244,16 +1250,17 @@ class trinityDataPurchasing extends MY_Controller {
 					'workstationID' => $this->_getIPAddress(),
 					'timeStamp' => $this->_getTimeStamp(),
 					'updatedBy' => $userName,
-					
-				);				 
-				$this->_insertRecords($tableName = 'triune_job_request_transaction_asrs_request_category', $insertData4);        			 
+
+				);
+				//inserting data of REQUESTCATEGORY to: triune_job_request_transaction_asrs_request_category
+				$this->_insertRecords($tableName = 'triune_job_request_transaction_asrs_request_category', $insertData4);
 
 				$actionName4 = "Insert Request Request Category";
 				$for4 = $ID . ";" . $userName;
 				$oldValue4 = null;
 				$newValue4 =  $insertData4;
 				$userType = 1;
-				$this->_insertAuditTrail($actionName4, $systemForAuditName4, $moduleName4, $for4, $oldValue4, $newValue4, $userType);		
+				$this->_insertAuditTrail($actionName4, $systemForAuditName4, $moduleName4, $for4, $oldValue4, $newValue4, $userType);
 
 				$fileName4 = "triune_job_request_transaction_asrs_request_category-" . $this->_getCurrentDate();
 				$text4 = "INSERT INTO triune_job_request_transaction_asrs_request_category ";
@@ -1267,12 +1274,13 @@ class trinityDataPurchasing extends MY_Controller {
 				$text4 = $text4 .  "'".$userName . "'";
 				$text4 = $text4 . ");";
 				$this->_insertTextLog($fileName4, $text4, $this->LOGFOLDER);
-					
+
 
 			}
 			//--------------INSERT REQUEST REQUEST CATEGORY-------------------
-			
+
 			//--------------INSERT REQUEST SUPPLIER-------------------
+			//inserting values for REQUESTSREQUESTSUPPLIER
 			if( (strlen($currentSupplier)) > 0) {
 				$systemForAuditName5 = "ASRS";
 				$moduleName5 = "REQUESTSREQUESTSUPPLIER";
@@ -1289,16 +1297,17 @@ class trinityDataPurchasing extends MY_Controller {
 					'workstationID' => $this->_getIPAddress(),
 					'timeStamp' => $this->_getTimeStamp(),
 					'updatedBy' => $userName,
-					
-				);				 
-				$this->_insertRecords($tableName = 'triune_job_request_transaction_asrs_supplier', $insertData5);        			 
+
+				);
+				//inserting of REQUESTSREQUESTSUPPLIER data to triune_job_request_transaction_asrs_supplier
+				$this->_insertRecords($tableName = 'triune_job_request_transaction_asrs_supplier', $insertData5);
 
 				$actionName5 = "Insert Request Supplier";
 				$for5 = $ID . ";" . $userName;
 				$oldValue5 = null;
 				$newValue5 =  $insertData5;
 				$userType = 1;
-				$this->_insertAuditTrail($actionName5, $systemForAuditName5, $moduleName5, $for5, $oldValue5, $newValue5, $userType);		
+				$this->_insertAuditTrail($actionName5, $systemForAuditName5, $moduleName5, $for5, $oldValue5, $newValue5, $userType);
 
 				$fileName5 = "triune_job_request_transaction_asrs_supplier-" . $this->_getCurrentDate();
 				$text5 = "INSERT INTO triune_job_request_transaction_asrs_supplier ";
@@ -1314,7 +1323,7 @@ class trinityDataPurchasing extends MY_Controller {
 				$text5 = $text5 .  "'".$userName . "'";
 				$text5 = $text5 . ");";
 				$this->_insertTextLog($fileName5, $text5, $this->LOGFOLDER);
-					
+
 			}
 			//--------------INSERT REQUEST SUPPLIER-------------------
 
@@ -1322,21 +1331,22 @@ class trinityDataPurchasing extends MY_Controller {
 
 			if($itemID != null){
 				//--------------UPDATE REQUEST ITEMS AMOUNT-------------------
+				//updating of record from request items amount
 				$systemForAuditName6 = "ASRS";
 				$moduleName6 = "REQUESTITEMSAMOUNT";
-				
+
 				$amawnt = explode(",",$itemAmount);
 				$aytemID = explode(",",$itemID);
 				$validAmount = 0;
-				
+
 				for($i = 0; $i < count($aytemID); $i++ ) {
-					
+
 					if(is_numeric($amawnt[$i]) && $amawnt[$i] > 0){
 						$validAmount = $amawnt[$i];
 					} else {
 						$validAmount = 0;
 					}
-					
+
 					$itemAmountUpdate = null;
 
 					$itemAmountUpdate = array(
@@ -1344,20 +1354,20 @@ class trinityDataPurchasing extends MY_Controller {
 						'workstationID' => $this->_getIPAddress(),
 						'timeStamp' => $this->_getTimeStamp(),
 						'updatedBy' => $userName,
-						
-					);	
 
-					
-					$this->_updateRecords($tableName = 'triune_job_request_transaction_asrs_items', 
-					$fieldName = array('ID'), 
+					);
+
+					//inserting of the updated item amount to triune_job_request_transaction_asrs_items
+					$this->_updateRecords($tableName = 'triune_job_request_transaction_asrs_items',
+					$fieldName = array('ID'),
 					$where = array($aytemID[$i]), $itemAmountUpdate);
-					
+
 					$actionName6 = "Update itemsAmount to: " . $validAmount;
 					$for6 = $aytemID[$i] . ";" . $userName;
 					$oldValue6 = null;
 					$newValue6 =  $requestStatusUpdate;
 					$userType = 1;
-					$this->_insertAuditTrail($actionName6, $systemForAuditName6, $moduleName6, $for6, $oldValue6, $newValue6, $userType);		
+					$this->_insertAuditTrail($actionName6, $systemForAuditName6, $moduleName6, $for6, $oldValue6, $newValue6, $userType);
 
 					$fileName6 = "triune_job_request_transaction_asrs_items-" . $this->_getCurrentDate();
 					$text6 = "UPDATE triune_job_request_transaction_asrs_items ";
@@ -1370,8 +1380,9 @@ class trinityDataPurchasing extends MY_Controller {
 				}
 				//--------------UPDATE REQUEST ITEMS AMOUNT-------------------
 			}
-			
+
 			//--------------INSERT REQUEST ACTUAL BUDGET AMOUNT-------------------
+			//inserting the actual budget amount
 			$systemForAuditName7 = "ASRS";
 			$moduleName7 = "REQUESTACTUALBUDGET";
 
@@ -1385,16 +1396,17 @@ class trinityDataPurchasing extends MY_Controller {
 					'workstationID' => $this->_getIPAddress(),
 					'timeStamp' => $this->_getTimeStamp(),
 					'updatedBy' => $userName,
-					
-				);				 
-				$this->_insertRecords($tableName = 'triune_job_request_transaction_asrs_actual_budget', $insertData7);        			 
-				
+
+				);
+				///inserting actual budget amount to triune_job_request_transaction_asrs_actual_budget
+				$this->_insertRecords($tableName = 'triune_job_request_transaction_asrs_actual_budget', $insertData7);
+
 				$actionName7 = "Insert Request Actual Budget Amount";
 				$for7 = $ID . ";" . $userName;
 				$oldValue7 = null;
 				$newValue7 =  $insertData7;
 				$userType = 1;
-				$this->_insertAuditTrail($actionName7, $systemForAuditName7, $moduleName7, $for7, $oldValue7, $newValue7, $userType);		
+				$this->_insertAuditTrail($actionName7, $systemForAuditName7, $moduleName7, $for7, $oldValue7, $newValue7, $userType);
 
 				$fileName7 = "triune_job_request_transaction_asrs_actual_budget-" . $this->_getCurrentDate();
 				$text7 = "INSERT INTO triune_job_request_transaction_asrs_actual_budget ";
@@ -1409,8 +1421,8 @@ class trinityDataPurchasing extends MY_Controller {
 				$this->_insertTextLog($fileName7, $text7, $this->LOGFOLDER);
 			}
 			//--------------INSERT REQUEST ACTUAL BUDGET AMOUNT-------------------
-			
-			
+
+
 /*
 			//--------------INSERT REQUEST STATUS REMARKS-------------------
 			$systemForAuditName5 = "TBAMIMS";
@@ -1426,16 +1438,16 @@ class trinityDataPurchasing extends MY_Controller {
 					'workstationID' => $this->_getIPAddress(),
 					'timeStamp' => $this->_getTimeStamp(),
 					'updatedBy' => $userName,
-					
-				);				 
-				$this->_insertRecords($tableName = 'triune_job_request_transaction_tbamims_status_remarks', $insertData5);        			 
-				
+
+				);
+				$this->_insertRecords($tableName = 'triune_job_request_transaction_tbamims_status_remarks', $insertData5);
+
 				$actionName5 = "Insert Request Status Remarks";
 				$for5 = $ID . ";" . $userName;
 				$oldValue5 = null;
 				$newValue5 =  $insertData5;
 				$userType = 1;
-				$this->_insertAuditTrail($actionName5, $systemForAuditName5, $moduleName5, $for5, $oldValue5, $newValue5, $userType);		
+				$this->_insertAuditTrail($actionName5, $systemForAuditName5, $moduleName5, $for5, $oldValue5, $newValue5, $userType);
 
 				$fileName5 = "triune_job_request_transaction_tbamims_status_remarks-" . $this->_getCurrentDate();
 				$text5 = "INSERT INTO triune_job_request_transaction_tbamims_status_remarks ";
@@ -1451,13 +1463,13 @@ class trinityDataPurchasing extends MY_Controller {
 			}
 			//--------------INSERT REQUEST STATUS REMARKS-------------------
 
-			
-			
-			
+
+
+
 
 */
 
-			
+
 		$this->db->trans_complete();
 
 
@@ -1471,17 +1483,17 @@ class trinityDataPurchasing extends MY_Controller {
 
 
 	public function insertMaterialsASRS() {
-
+//to require user to input particular and units for "REFERENCE-MDL"
 		$this->form_validation->set_rules('particulars', 'Particulars', 'required');
-		$this->form_validation->set_rules('units', 'Units', 'required');  
+		$this->form_validation->set_rules('units', 'Units', 'required');
 
-		if ($this->form_validation->run() == FALSE) {   
+		if ($this->form_validation->run() == FALSE) {
 			echo json_encode($this->form_validation->error_array());
-		}else{    
+		}else{
 			$returnValue = array();
-			$post = $this->input->post();  
+			$post = $this->input->post();
 			$clean = $this->security->xss_clean($post);
-			
+
 			$particulars =  $clean['particulars'];
 			$units =  $clean['units'];
 
@@ -1491,57 +1503,57 @@ class trinityDataPurchasing extends MY_Controller {
 			$systemForAuditName = "TBAMIMS";
 			$moduleName = "REFERENCES-MDL";
 
-			
+
 			if( ($quote1Found > 0) || ($quote2Found > 0) ) {
-	
+
 				$returnValue['message'] = 'quote';
 
 				$returnValue['success'] = 0;
 				echo json_encode($returnValue);
 			} else {
-				
-				$referenceExist = $this->_getRecordsData($selectfields = array('ID'), 
-				$tables = array('triune_job_request_materials_tbamims'), 
-				$fieldName = array('particulars', 'units'), 
-				$where = array($particulars, $units), 
-				$join = null, $joinType = null, $sortBy = null, $sortOrder = null, 
+//if true insert data to triune_job_request_materials_tbamims
+				$referenceExist = $this->_getRecordsData($selectfields = array('ID'),
+				$tables = array('triune_job_request_materials_tbamims'),
+				$fieldName = array('particulars', 'units'),
+				$where = array($particulars, $units),
+				$join = null, $joinType = null, $sortBy = null, $sortOrder = null,
 				$limit = null, 	$fieldNameLike = null, $like = null, $whereSpecial = null, $groupBy = null );
-				
+
 				$userName = $this->_getUserName(1);
-		
+
 				if(empty($referenceExist)) {
 
-	
-		
+
+
 					$insertData1 = null;
 					$insertData1 = array(
 						'particulars' => strtoupper($particulars),
 						'units' => strtoupper($units),
 						'userNumber' => $userName,
 						'timeStamp' => $this->_getTimeStamp(),
-					);				 
-		
+					);
+//transaction start for New Materials
 					$this->db->trans_start();
-						$this->_insertRecords($tableName = 'triune_job_request_materials_tbamims', $insertData1);        			 
-		
-						$insertedRecord1 = $this->_getRecordsData($selectfields = array('ID'), 
-						$tables = array('triune_job_request_materials_tbamims'), 
-						$fieldName = array('particulars', 'units'), 
-						$where = array($particulars, $units), 
-						$join = null, $joinType = null, $sortBy = null, $sortOrder = null, 
+						$this->_insertRecords($tableName = 'triune_job_request_materials_tbamims', $insertData1);
+
+						$insertedRecord1 = $this->_getRecordsData($selectfields = array('ID'),
+						$tables = array('triune_job_request_materials_tbamims'),
+						$fieldName = array('particulars', 'units'),
+						$where = array($particulars, $units),
+						$join = null, $joinType = null, $sortBy = null, $sortOrder = null,
 						$limit = null, 	$fieldNameLike = null, $like = null, $whereSpecial = null, $groupBy = null );
-		
+
 						$actionName1 = "Insert New Materials";
 						$for1 = $insertedRecord1[0]->ID . ";" . $userName;
 						$oldValue1 = null;
 						$newValue1 =  $insertData1;
 						$userType = 1;
-						$this->_insertAuditTrail($actionName1, $systemForAuditName, $moduleName, $for1, $oldValue1, $newValue1, $userType);		
-		
+						$this->_insertAuditTrail($actionName1, $systemForAuditName, $moduleName, $for1, $oldValue1, $newValue1, $userType);
+
 
 					$this->db->trans_complete();
 
-				
+//update triune_job_request_materials_tbamims data if transaction failed goes back to insert new materials
 					$fileName1 = "triune_job_request_materials_tbamims-" . $this->_getCurrentDate();
 					$text1 = "INSERT INTO triune_job_request_materials_tbamims ";
 					$text1 = $text1 .  "VALUES (" .  $insertedRecord1[0]->ID . ", ";
@@ -1557,12 +1569,12 @@ class trinityDataPurchasing extends MY_Controller {
 						$this->_transactionFailed();
 						$this->db->trans_rollback();
 						return FALSE;
-					} 
+					}
 					else {
 						$this->db->trans_commit();
 						//return TRUE;
 					}
-					
+
 					$returnValue['ID'] = $insertedRecord1[0]->ID;
 					$returnValue['success'] = 1;
 					echo json_encode($returnValue);
@@ -1571,18 +1583,18 @@ class trinityDataPurchasing extends MY_Controller {
 
 					$returnValue['success'] = 0;
 					echo json_encode($returnValue);
-				
+
 				} //if(empty($referenceExist))
 			} //( ($quote1Found !== false) && ($quote2Found !== false) )
 		}	//($this->form_validation->run() == FALSE)
 	}
 
 
-
+// displaying data from AllRequestListASRS from triune_job_request_transaction_tbamims
     public function getAllRequestListASRS() {
-		$post = $this->input->post();  
+		$post = $this->input->post();
 		$clean = $this->security->xss_clean($post);
-		
+
 		$page = isset($clean['page']) ? intval($clean['page']) : 1;
 		$rows = isset($clean['rows']) ? intval($clean['rows']) : 10;
 		$ID = isset($clean['ID']) ? $clean['ID'] : '';
@@ -1594,28 +1606,28 @@ class trinityDataPurchasing extends MY_Controller {
 		$whereSpcl = "triune_job_request_transaction_tbamims.ID like '$ID%'";
 		$whereSpcl = $whereSpcl . " and triune_job_request_transaction_tbamims.requestStatus like '$requestStatus%'";
 		$whereSpcl = $whereSpcl . " and triune_job_request_transaction_tbamims.userName like '$userName%'";
-	 
 
 
-		$results = $this->_getRecordsData($data = array('count(*) as totalRecs'), 
-			$tables = array('triune_job_request_transaction_tbamims'), $fieldName = null, $where = null, $join = null, $joinType = null, 
-			$sortBy = null, $sortOrder = null, $limit = null, 
-			$fieldNameLike = null, $like = null, 
+
+		$results = $this->_getRecordsData($data = array('count(*) as totalRecs'),
+			$tables = array('triune_job_request_transaction_tbamims'), $fieldName = null, $where = null, $join = null, $joinType = null,
+			$sortBy = null, $sortOrder = null, $limit = null,
+			$fieldNameLike = null, $like = null,
 			$whereSpecial = array($whereSpcl), $groupBy = null );
 
 			//$row = mysql_fetch_row($results);
 			$result["total"] = intval($results[0]->totalRecs);
 
-			$results = $this->_getRecordsData($data = array('triune_job_request_transaction_tbamims.*', 'triune_request_status_reference.requestStatusDescription'), 
-			$tables = array('triune_job_request_transaction_tbamims', 'triune_request_status_reference'), 
-			$fieldName = array('triune_request_status_reference.application'), $where = array('TBAMIMS'), 
-			$join = array('triune_job_request_transaction_tbamims.requestStatus = triune_request_status_reference.requestStatusCode'), 
-			$joinType = array('left'), 
-			$sortBy = array('triune_job_request_transaction_tbamims.ID'), $sortOrder = array('desc'), 
-			$limit = array($rows, $offset), 
-			$fieldNameLike = null, $like = null, 
+			$results = $this->_getRecordsData($data = array('triune_job_request_transaction_tbamims.*', 'triune_request_status_reference.requestStatusDescription'),
+			$tables = array('triune_job_request_transaction_tbamims', 'triune_request_status_reference'),
+			$fieldName = array('triune_request_status_reference.application'), $where = array('TBAMIMS'),
+			$join = array('triune_job_request_transaction_tbamims.requestStatus = triune_request_status_reference.requestStatusCode'),
+			$joinType = array('left'),
+			$sortBy = array('triune_job_request_transaction_tbamims.ID'), $sortOrder = array('desc'),
+			$limit = array($rows, $offset),
+			$fieldNameLike = null, $like = null,
 			$whereSpecial = array($whereSpcl), $groupBy = null );
-			
+
 			$result["rows"] = $results;
 
 			$result["ID"] = $ID;
@@ -1629,11 +1641,11 @@ class trinityDataPurchasing extends MY_Controller {
 
 
 
-
+//to close requestslists
 	public function closeRequestASRS() {
-		$post = $this->input->post();  
+		$post = $this->input->post();
 		$clean = $this->security->xss_clean($post);
-		
+
 		$ID =  $clean['ID'];
 		$requestStatus =  $clean['requestStatus'];
 		$userName = $this->_getUserName(1);
@@ -1642,24 +1654,25 @@ class trinityDataPurchasing extends MY_Controller {
 		$this->db->trans_start();
 
 			//--------------UPDATE REQUEST STATUS-------------------
+			//request to update in request status and inserting updated data to triune_job_request_transaction_tbamims
 			$systemForAuditName0 = "TBAMIMS";
 			$moduleName0 = "REQUESTUPDATE";
-			
+
 			$requestStatusUpdate = array(
 				'requestStatus' => $requestStatus,
 				'dateClosed' => $this->_getCurrentDate()
 			);
-				
-			$this->_updateRecords($tableName = 'triune_job_request_transaction_tbamims', 
-			$fieldName = array('ID'), 
+
+			$this->_updateRecords($tableName = 'triune_job_request_transaction_tbamims',
+			$fieldName = array('ID'),
 			$where = array($ID), $requestStatusUpdate);
-			
+
 			$actionName0 = "Update Transaction Request to: " . $requestStatus;
 			$for0 = $ID . ";" . $userName;
 			$oldValue0 = null;
 			$newValue0 =  $requestStatusUpdate;
 			$userType = 1;
-			$this->_insertAuditTrail($actionName0, $systemForAuditName0, $moduleName0, $for0, $oldValue0, $newValue0, $userType);		
+			$this->_insertAuditTrail($actionName0, $systemForAuditName0, $moduleName0, $for0, $oldValue0, $newValue0, $userType);
 
 			$fileName0 = "triune_job_request_transaction_tbamims-" . $this->_getCurrentDate();
 			$text0 = "UPDATE triune_job_request_transaction_tbamims ";
@@ -1675,6 +1688,7 @@ class trinityDataPurchasing extends MY_Controller {
 
 
 			//--------------UPDATE REQUEST STATATUS HISTORY-------------------
+			//request to update request status history and inserting updated data to triune_job_request_transaction_tbamims_status_history
 			$systemForAuditName1 = "TBAMIMS";
 			$moduleName1 = "REQUESTSTATUSHISTORY";
 
@@ -1686,9 +1700,9 @@ class trinityDataPurchasing extends MY_Controller {
 				'workstationID' => $this->_getIPAddress(),
 				'timeStamp' => $this->_getTimeStamp(),
 				'updatedBy' => $userName,
-				
-			);				 
-			$this->_insertRecords($tableName = 'triune_job_request_transaction_tbamims_status_history', $insertData1);        			 
+
+			);
+			$this->_insertRecords($tableName = 'triune_job_request_transaction_tbamims_status_history', $insertData1);
 
 
 			$actionName1 = "Update Request Status History with: " . $requestStatus;
@@ -1696,7 +1710,7 @@ class trinityDataPurchasing extends MY_Controller {
 			$oldValue1 = null;
 			$newValue1 =  $insertData1;
 			$userType = 1;
-			$this->_insertAuditTrail($actionName1, $systemForAuditName1, $moduleName1, $for1, $oldValue1, $newValue1, $userType);		
+			$this->_insertAuditTrail($actionName1, $systemForAuditName1, $moduleName1, $for1, $oldValue1, $newValue1, $userType);
 
 			$fileName1 = "triune_job_request_transaction_tbamims_status_history-" . $this->_getCurrentDate();
 			$text1 = "INSERT INTO triune_job_request_transaction_tbamims_status_history ";
@@ -1710,7 +1724,7 @@ class trinityDataPurchasing extends MY_Controller {
 			$this->_insertTextLog($fileName1, $text1);
 			//--------------UPDATE REQUEST STATATUS HISTORY-------------------
 
-			
+
 		$this->db->trans_complete();
 
 
@@ -1721,42 +1735,43 @@ class trinityDataPurchasing extends MY_Controller {
 
 	}
 
-
+//request to return requests
 	public function returnRequestASRS() {
-		$post = $this->input->post();  
+		$post = $this->input->post();
 		$clean = $this->security->xss_clean($post);
-		
+
 		$ID =  $clean['ID'];
 		$requestStatus =  $clean['requestStatus'];
 		$returnedFrom =  $clean['returnedFrom'];
 		$specialInstructions =  $clean['specialInstructions'];
 		$scopeDetails =  $clean['scopeDetails'];
 		$requestStatusRemarksID =  $clean['requestStatusRemarksID'];
-		
+
 		$userName = $this->_getUserName(1);
 
 
 		$this->db->trans_start();
 
 			//--------------UPDATE REQUEST STATUS-------------------
+			//request to update request status and inserting updated data to triune_job_request_transaction_tbamims
 			$systemForAuditName0 = "TBAMIMS";
 			$moduleName0 = "REQUESTUPDATE";
-			
+
 			$requestStatusUpdate = array(
 				'requestStatus' => $requestStatus,
 				'returnedFrom' => $returnedFrom
 			);
-				
-			$this->_updateRecords($tableName = 'triune_job_request_transaction_tbamims', 
-			$fieldName = array('ID'), 
+
+			$this->_updateRecords($tableName = 'triune_job_request_transaction_tbamims',
+			$fieldName = array('ID'),
 			$where = array($ID), $requestStatusUpdate);
-			
+
 			$actionName0 = "Update Transaction Request to: " . $requestStatus;
 			$for0 = $ID . ";" . $userName;
 			$oldValue0 = null;
 			$newValue0 =  $requestStatusUpdate;
 			$userType = 1;
-			$this->_insertAuditTrail($actionName0, $systemForAuditName0, $moduleName0, $for0, $oldValue0, $newValue0, $userType);		
+			$this->_insertAuditTrail($actionName0, $systemForAuditName0, $moduleName0, $for0, $oldValue0, $newValue0, $userType);
 
 			$fileName0 = "triune_job_request_transaction_tbamims-" . $this->_getCurrentDate();
 			$text0 = "UPDATE triune_job_request_transaction_tbamims ";
@@ -1772,6 +1787,7 @@ class trinityDataPurchasing extends MY_Controller {
 
 
 			//--------------UPDATE REQUEST STATATUS HISTORY-------------------
+			//request to update request status history and inserting updated data to triune_job_request_transaction_tbamims_status_history
 			$systemForAuditName1 = "TBAMIMS";
 			$moduleName1 = "REQUESTSTATUSHISTORY";
 
@@ -1784,9 +1800,9 @@ class trinityDataPurchasing extends MY_Controller {
 				'workstationID' => $this->_getIPAddress(),
 				'timeStamp' => $this->_getTimeStamp(),
 				'updatedBy' => $userName,
-				
-			);				 
-			$this->_insertRecords($tableName = 'triune_job_request_transaction_tbamims_status_history', $insertData1);        			 
+
+			);
+			$this->_insertRecords($tableName = 'triune_job_request_transaction_tbamims_status_history', $insertData1);
 
 
 			$actionName1 = "Update Request Status History with: " . $requestStatus;
@@ -1794,7 +1810,7 @@ class trinityDataPurchasing extends MY_Controller {
 			$oldValue1 = null;
 			$newValue1 =  $insertData1;
 			$userType = 1;
-			$this->_insertAuditTrail($actionName1, $systemForAuditName1, $moduleName1, $for1, $oldValue1, $newValue1, $userType);		
+			$this->_insertAuditTrail($actionName1, $systemForAuditName1, $moduleName1, $for1, $oldValue1, $newValue1, $userType);
 
 			$fileName1 = "triune_job_request_transaction_tbamims_status_history-" . $this->_getCurrentDate();
 			$text1 = "INSERT INTO triune_job_request_transaction_tbamims_status_history ";
@@ -1809,9 +1825,10 @@ class trinityDataPurchasing extends MY_Controller {
 			$this->_insertTextLog($fileName1, $text1);
 			//--------------UPDATE REQUEST STATATUS HISTORY-------------------
 
-			
-			
+
+
 			//--------------INSERT REQUEST SPECIAL INSTRUCTIONS-------------------
+			//inserting request special instruction and inserting data to triune_job_request_transaction_tbamims_special_instructions
 			if( (strlen($specialInstructions)) > 0) {
 				$systemForAuditName2 = "TBAMIMS";
 				$moduleName2 = "REQUESTSPECIALINSTRUCTIONS";
@@ -1825,16 +1842,16 @@ class trinityDataPurchasing extends MY_Controller {
 					'workstationID' => $this->_getIPAddress(),
 					'timeStamp' => $this->_getTimeStamp(),
 					'updatedBy' => $userName,
-					
-				);				 
-				$this->_insertRecords($tableName = 'triune_job_request_transaction_tbamims_special_instructions', $insertData2);        			 
+
+				);
+				$this->_insertRecords($tableName = 'triune_job_request_transaction_tbamims_special_instructions', $insertData2);
 
 				$actionName2 = "Insert Request Special Instructions";
 				$for2 = $ID . ";" . $userName;
 				$oldValue2 = null;
 				$newValue2 =  $insertData2;
 				$userType = 1;
-				$this->_insertAuditTrail($actionName2, $systemForAuditName2, $moduleName2, $for2, $oldValue2, $newValue2, $userType);		
+				$this->_insertAuditTrail($actionName2, $systemForAuditName2, $moduleName2, $for2, $oldValue2, $newValue2, $userType);
 
 				$fileName2 = "triune_job_request_transaction_tbamims_special_instructions-" . $this->_getCurrentDate();
 				$text2 = "INSERT INTO triune_job_request_transaction_tbamims_special_instructions ";
@@ -1847,13 +1864,14 @@ class trinityDataPurchasing extends MY_Controller {
 				$text2 = $text2 .  "'".$userName . "', ";
 				$text2 = $text2 . "');";
 				$this->_insertTextLog($fileName2, $text2);
-					
+
 
 			}
 			//--------------INSERT REQUEST SPECIAL INSTRUCTIONS-------------------
 
 
 			//--------------INSERT REQUEST SCOPE DETAILS-------------------
+			//inserting request scope details and inserting data to triune_job_request_transaction_tbamims_scope_details
 			$systemForAuditName3 = "TBAMIMS";
 			$moduleName3 = "REQUESTSCOPEDETAILS";
 
@@ -1867,16 +1885,16 @@ class trinityDataPurchasing extends MY_Controller {
 					'workstationID' => $this->_getIPAddress(),
 					'timeStamp' => $this->_getTimeStamp(),
 					'updatedBy' => $userName,
-					
-				);				 
-				$this->_insertRecords($tableName = 'triune_job_request_transaction_tbamims_scope_details', $insertData3);        			 
-				
+
+				);
+				$this->_insertRecords($tableName = 'triune_job_request_transaction_tbamims_scope_details', $insertData3);
+
 				$actionName3 = "Insert Request Scope Details";
 				$for3 = $ID . ";" . $userName;
 				$oldValue3 = null;
 				$newValue3 =  $insertData3;
 				$userType = 1;
-				$this->_insertAuditTrail($actionName3, $systemForAuditName3, $moduleName3, $for3, $oldValue3, $newValue3, $userType);		
+				$this->_insertAuditTrail($actionName3, $systemForAuditName3, $moduleName3, $for3, $oldValue3, $newValue3, $userType);
 
 				$fileName3 = "triune_job_request_transaction_tbamims_scope_details-" . $this->_getCurrentDate();
 				$text3 = "INSERT INTO triune_job_request_transaction_tbamims_scope_details ";
@@ -1897,6 +1915,7 @@ class trinityDataPurchasing extends MY_Controller {
 
 
 			//--------------INSERT REQUEST STATUS REMARKS-------------------
+			//inserting request status remarks and inserting the data to triune_job_request_transaction_tbamims_status_remarks
 			$systemForAuditName5 = "TBAMIMS";
 			$moduleName5 = "REQUESTSTATUSREMARKS";
 
@@ -1910,16 +1929,16 @@ class trinityDataPurchasing extends MY_Controller {
 					'workstationID' => $this->_getIPAddress(),
 					'timeStamp' => $this->_getTimeStamp(),
 					'updatedBy' => $userName,
-					
-				);				 
-				$this->_insertRecords($tableName = 'triune_job_request_transaction_tbamims_status_remarks', $insertData5);        			 
-				
+
+				);
+				$this->_insertRecords($tableName = 'triune_job_request_transaction_tbamims_status_remarks', $insertData5);
+
 				$actionName5 = "Insert Request Status Remarks";
 				$for5 = $ID . ";" . $userName;
 				$oldValue5 = null;
 				$newValue5 =  $insertData5;
 				$userType = 1;
-				$this->_insertAuditTrail($actionName5, $systemForAuditName5, $moduleName5, $for5, $oldValue5, $newValue5, $userType);		
+				$this->_insertAuditTrail($actionName5, $systemForAuditName5, $moduleName5, $for5, $oldValue5, $newValue5, $userType);
 
 				$fileName5 = "triune_job_request_transaction_tbamims_status_remarks-" . $this->_getCurrentDate();
 				$text5 = "INSERT INTO triune_job_request_transaction_tbamims_status_remarks ";
@@ -1935,9 +1954,9 @@ class trinityDataPurchasing extends MY_Controller {
 			}
 			//--------------INSERT REQUEST STATUS REMARKS-------------------
 
-			
-			
-			
+
+
+
 		$this->db->trans_complete();
 
 
@@ -1947,40 +1966,41 @@ class trinityDataPurchasing extends MY_Controller {
 
 
 	}
-	
+//to update request multiple status
 	public function updateRequestMultipleStatusASRS() {
-		$post = $this->input->post();  
+		$post = $this->input->post();
 		$clean = $this->security->xss_clean($post);
-		
+
 		$ID =  $clean['ID'];
 		$requestStatus =  $clean['requestStatus'];
 		$specialInstructions =  $clean['specialInstructions'];
 		$scopeDetails =  $clean['scopeDetails'];
 		$requestStatusRemarksID =  $clean['requestStatusRemarksID'];
-		
+
 		$userName = $this->_getUserName(1);
 
 
 		$this->db->trans_start();
 
 			//--------------UPDATE REQUEST STATUS-------------------
+			//updating request status
 			$systemForAuditName0 = "TBAMIMS";
 			$moduleName0 = "REQUESTUPDATE";
-			
+
 			$requestStatusUpdate = array(
 				'requestStatus' => $requestStatus,
 			);
-				
-			$this->_updateRecords($tableName = 'triune_job_request_transaction_tbamims', 
-			$fieldName = array('ID'), 
+//inserting updated rrequest status
+			$this->_updateRecords($tableName = 'triune_job_request_transaction_tbamims',
+			$fieldName = array('ID'),
 			$where = array($ID), $requestStatusUpdate);
-			
+
 			$actionName0 = "Update Transaction Request to: " . $requestStatus;
 			$for0 = $ID . ";" . $userName;
 			$oldValue0 = null;
 			$newValue0 =  $requestStatusUpdate;
 			$userType = 1;
-			$this->_insertAuditTrail($actionName0, $systemForAuditName0, $moduleName0, $for0, $oldValue0, $newValue0, $userType);		
+			$this->_insertAuditTrail($actionName0, $systemForAuditName0, $moduleName0, $for0, $oldValue0, $newValue0, $userType);
 
 			$fileName0 = "triune_job_request_transaction_tbamims-" . $this->_getCurrentDate();
 			$text0 = "UPDATE triune_job_request_transaction_tbamims ";
@@ -1994,6 +2014,7 @@ class trinityDataPurchasing extends MY_Controller {
 			$details = $this->_getTransactionDetails($ID, $from = 'triune_job_request_transaction_tbamims');
 
 			//--------------UPDATE REQUEST STATATUS HISTORY APPROVED-------------------
+			//approving the request status history
 			$systemForAuditNameA = "TBAMIMS";
 			$moduleNameA = "REQUESTSTATUSHISTORY";
 
@@ -2005,9 +2026,10 @@ class trinityDataPurchasing extends MY_Controller {
 				'workstationID' => $this->_getIPAddress(),
 				'timeStamp' => $this->_getTimeStamp(),
 				'updatedBy' => $userName,
-				
-			);				 
-			$this->_insertRecords($tableName = 'triune_job_request_transaction_tbamims_status_history', $insertDataA);        			 
+
+			);
+			//updating request status history if it is approved
+			$this->_insertRecords($tableName = 'triune_job_request_transaction_tbamims_status_history', $insertDataA);
 
 
 			$actionNameA = "Update Request Status History with: A";
@@ -2015,7 +2037,7 @@ class trinityDataPurchasing extends MY_Controller {
 			$oldValueA = null;
 			$newValueA =  $insertDataA;
 			$userType = 1;
-			$this->_insertAuditTrail($actionNameA, $systemForAuditNameA, $moduleNameA, $forA, $oldValueA, $newValueA, $userType);		
+			$this->_insertAuditTrail($actionNameA, $systemForAuditNameA, $moduleNameA, $forA, $oldValueA, $newValueA, $userType);
 
 			$fileNameA = "triune_job_request_transaction_tbamims_status_history-" . $this->_getCurrentDate();
 			$textA = "INSERT INTO triune_job_request_transaction_tbamims_status_history ";
@@ -2028,11 +2050,12 @@ class trinityDataPurchasing extends MY_Controller {
 			$textA = $textA . "');";
 			$this->_insertTextLog($fileNameA, $textA);
 			//--------------UPDATE REQUEST STATATUS HISTORY APPROVED-------------------
-			
-			
-			
+
+
+
 
 			//--------------UPDATE REQUEST STATATUS HISTORY-------------------
+			//updating request status history
 			$systemForAuditName1 = "TBAMIMS";
 			$moduleName1 = "REQUESTSTATUSHISTORY";
 
@@ -2044,9 +2067,10 @@ class trinityDataPurchasing extends MY_Controller {
 				'workstationID' => $this->_getIPAddress(),
 				'timeStamp' => $this->_getTimeStamp(),
 				'updatedBy' => $userName,
-				
-			);				 
-			$this->_insertRecords($tableName = 'triune_job_request_transaction_tbamims_status_history', $insertData1);        			 
+
+			);
+			//inserting updated data triune_job_request_transaction_tbamims_status_history
+			$this->_insertRecords($tableName = 'triune_job_request_transaction_tbamims_status_history', $insertData1);
 
 
 			$actionName1 = "Update Request Status History with: " . $requestStatus;
@@ -2054,7 +2078,7 @@ class trinityDataPurchasing extends MY_Controller {
 			$oldValue1 = null;
 			$newValue1 =  $insertData1;
 			$userType = 1;
-			$this->_insertAuditTrail($actionName1, $systemForAuditName1, $moduleName1, $for1, $oldValue1, $newValue1, $userType);		
+			$this->_insertAuditTrail($actionName1, $systemForAuditName1, $moduleName1, $for1, $oldValue1, $newValue1, $userType);
 
 			$fileName1 = "triune_job_request_transaction_tbamims_status_history-" . $this->_getCurrentDate();
 			$text1 = "INSERT INTO triune_job_request_transaction_tbamims_status_history ";
@@ -2068,9 +2092,10 @@ class trinityDataPurchasing extends MY_Controller {
 			$this->_insertTextLog($fileName1, $text1);
 			//--------------UPDATE REQUEST STATATUS HISTORY-------------------
 
-			
-			
+
+
 			//--------------INSERT REQUEST SPECIAL INSTRUCTIONS-------------------
+			//inserting values for request special instructions
 			if( (strlen($specialInstructions)) > 0) {
 				$systemForAuditName2 = "TBAMIMS";
 				$moduleName2 = "REQUESTSPECIALINSTRUCTIONS";
@@ -2084,16 +2109,17 @@ class trinityDataPurchasing extends MY_Controller {
 					'workstationID' => $this->_getIPAddress(),
 					'timeStamp' => $this->_getTimeStamp(),
 					'updatedBy' => $userName,
-					
-				);				 
-				$this->_insertRecords($tableName = 'triune_job_request_transaction_tbamims_special_instructions', $insertData2);        			 
+
+				);
+				//inserting data to triune_job_request_transaction_tbamims_special_instructions
+				$this->_insertRecords($tableName = 'triune_job_request_transaction_tbamims_special_instructions', $insertData2);
 
 				$actionName2 = "Insert Request Special Instructions";
 				$for2 = $ID . ";" . $userName;
 				$oldValue2 = null;
 				$newValue2 =  $insertData2;
 				$userType = 1;
-				$this->_insertAuditTrail($actionName2, $systemForAuditName2, $moduleName2, $for2, $oldValue2, $newValue2, $userType);		
+				$this->_insertAuditTrail($actionName2, $systemForAuditName2, $moduleName2, $for2, $oldValue2, $newValue2, $userType);
 
 				$fileName2 = "triune_job_request_transaction_tbamims_special_instructions-" . $this->_getCurrentDate();
 				$text2 = "INSERT INTO triune_job_request_transaction_tbamims_special_instructions ";
@@ -2106,13 +2132,14 @@ class trinityDataPurchasing extends MY_Controller {
 				$text2 = $text2 .  "'".$userName . "', ";
 				$text2 = $text2 . "');";
 				$this->_insertTextLog($fileName2, $text2);
-					
+
 
 			}
 			//--------------INSERT REQUEST SPECIAL INSTRUCTIONS-------------------
 
 
 			//--------------INSERT REQUEST SCOPE DETAILS-------------------
+			//inserting values for request scope details
 			$systemForAuditName3 = "TBAMIMS";
 			$moduleName3 = "REQUESTSCOPEDETAILS";
 
@@ -2126,16 +2153,17 @@ class trinityDataPurchasing extends MY_Controller {
 					'workstationID' => $this->_getIPAddress(),
 					'timeStamp' => $this->_getTimeStamp(),
 					'updatedBy' => $userName,
-					
-				);				 
-				$this->_insertRecords($tableName = 'triune_job_request_transaction_tbamims_scope_details', $insertData3);        			 
-				
+
+				);
+				//insert records to triune_job_request_transaction_tbamims_scope_details
+				$this->_insertRecords($tableName = 'triune_job_request_transaction_tbamims_scope_details', $insertData3);
+
 				$actionName3 = "Insert Request Scope Details";
 				$for3 = $ID . ";" . $userName;
 				$oldValue3 = null;
 				$newValue3 =  $insertData3;
 				$userType = 1;
-				$this->_insertAuditTrail($actionName3, $systemForAuditName3, $moduleName3, $for3, $oldValue3, $newValue3, $userType);		
+				$this->_insertAuditTrail($actionName3, $systemForAuditName3, $moduleName3, $for3, $oldValue3, $newValue3, $userType);
 
 				$fileName3 = "triune_job_request_transaction_tbamims_scope_details-" . $this->_getCurrentDate();
 				$text3 = "INSERT INTO triune_job_request_transaction_tbamims_scope_details ";
@@ -2156,6 +2184,7 @@ class trinityDataPurchasing extends MY_Controller {
 
 
 			//--------------INSERT REQUEST STATUS REMARKS-------------------
+//insert values to request status remarks
 			$systemForAuditName5 = "TBAMIMS";
 			$moduleName5 = "REQUESTSTATUSREMARKS";
 
@@ -2169,16 +2198,17 @@ class trinityDataPurchasing extends MY_Controller {
 					'workstationID' => $this->_getIPAddress(),
 					'timeStamp' => $this->_getTimeStamp(),
 					'updatedBy' => $userName,
-					
-				);				 
-				$this->_insertRecords($tableName = 'triune_job_request_transaction_tbamims_status_remarks', $insertData5);        			 
-				
+
+				);
+				//insert records to triune_job_request_transaction_tbamims_status_remarks
+				$this->_insertRecords($tableName = 'triune_job_request_transaction_tbamims_status_remarks', $insertData5);
+
 				$actionName5 = "Insert Request Status Remarks";
 				$for5 = $ID . ";" . $userName;
 				$oldValue5 = null;
 				$newValue5 =  $insertData5;
 				$userType = 1;
-				$this->_insertAuditTrail($actionName5, $systemForAuditName5, $moduleName5, $for5, $oldValue5, $newValue5, $userType);		
+				$this->_insertAuditTrail($actionName5, $systemForAuditName5, $moduleName5, $for5, $oldValue5, $newValue5, $userType);
 
 				$fileName5 = "triune_job_request_transaction_tbamims_status_remarks-" . $this->_getCurrentDate();
 				$text5 = "INSERT INTO triune_job_request_transaction_tbamims_status_remarks ";
@@ -2194,9 +2224,9 @@ class trinityDataPurchasing extends MY_Controller {
 			}
 			//--------------INSERT REQUEST STATUS REMARKS-------------------
 
-			
-			
-			
+
+
+
 		$this->db->trans_complete();
 
 
@@ -2206,5 +2236,5 @@ class trinityDataPurchasing extends MY_Controller {
 
 
 	}
-	
+
 }
