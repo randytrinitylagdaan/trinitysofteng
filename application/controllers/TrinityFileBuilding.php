@@ -25,7 +25,7 @@ class trinityFileBuilding extends MY_Controller {
     }//function __construct()
 
 
-
+//this function is for requesting data's that you need and uploading data of the sudent, this function needs your student details
 	public function uploadFileTBAMIMS() {
 		$ID = $_POST["ID"];
 		$userName = $this->_getUserName(1);
@@ -73,6 +73,6 @@ class trinityFileBuilding extends MY_Controller {
 			echo $output;   
 		}
 	}
-   
+//this function is for requesting data's that you need and uploading data of the sudent, this function needs your student details
 
 }

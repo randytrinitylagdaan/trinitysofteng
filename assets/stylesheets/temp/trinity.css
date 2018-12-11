@@ -16,7 +16,7 @@ DATE UPDATED: May 27, 2018
 }
 
 h3, h2 {
-  font-weight: bold;
+  font-weight: bolder;
 }
 
 /* spacing between input textboxes */
@@ -55,7 +55,7 @@ input[type=text] {
 div.top-header
 {
     height: 50px;
-    background-color: #003918; /* background-color changed from #006400 to #003918 by Laudit, Prime */
+    background-color: #016601; /* background-color changed from #003918 to #016601 by Delgado, Kendra */
 }
 
 div.row-space-100 {
@@ -76,7 +76,7 @@ div.footer {
     font-family: "Verdana", Geneva, sans-serif;
     font-size: 11px;
     font-style: italic;
-    background-color: #003918; /* background-color changed from #006400 to #003918 by Laudit, Prime */
+    background-color: #016601; /* background-color changed from #003918 to #016601 by Delgado, Kendra*/
     color: white
 }
 
@@ -96,9 +96,9 @@ div.form-panel {
     padding-bottom: 20px;
     padding-top: 20px;
     height: 100%;
-    background-color: #d0f0c0; /* background-color changed from #FFF5EE to #e5e5e5 by Laudit, Prime */
+    background-color: #d0f0c0; /* background-color changed from #FFF5EE to #e5e5e5 by Delgado, Kendra */
     border-radius: 10px;
-    font-family: Tahoma, Geneva, sans-serif;
+    font-family: Arial, Helvetica, sans-serif; /*font-family changed from Tahoma, Geneva, sans-serif to Arial, Helvetica, sans-serif by Delgado, Kendra */
 }
 
 div.form-panel-left {
@@ -114,7 +114,7 @@ h3 > em#capitalize {
 
 div#error-messages {
     color:red;
-    font-size:.8em;
+    font-size:.10em;
     font-family: Arial, Helvetica, sans-serif;
     font-style: italic;
 }
@@ -284,7 +284,7 @@ div#guest-input {
 /* for dropdown only - change the color of droodown */
 .navbar-custom .dropdown-menu {
     background-color: #96e296;
-}
+}		
 .navbar-custom .dropdown-item {
     color: #ffffff;
 }

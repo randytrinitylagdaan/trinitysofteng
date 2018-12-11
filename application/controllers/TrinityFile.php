@@ -25,7 +25,7 @@ class trinityFile extends MY_Controller {
     }//function __construct()
 
 
-
+//this function is for getting data and uploading data of the student this function is allowing to upload gif jpg pdf png jpeg type of files 
 	public function uploadFile() {
 		$ID = $_POST["ID"];
 		
@@ -74,6 +74,6 @@ class trinityFile extends MY_Controller {
 			echo $output;   
 		}
 	}
-   
-
+		
+//this function is for getting data and uploading data of the student this function is allowing to upload gif jpg pdf png jpeg type of files 
 }
