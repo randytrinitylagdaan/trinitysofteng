@@ -6,69 +6,116 @@ DATE CREATED: May 27, 2018
 DATE UPDATED: May 27, 2018
 --------------------------------------------------------------------*/
 
+/* addedd css codes by Laudit, Prime */
+* {
+  font-family: Verdana;
+}
+
+.col-12.row-space-25 {
+  height: 60px;
+}
+
+h3, h2 {
+  font-weight: bolder;
+}
+
+/* spacing between input textboxes */
+.input-group {
+  margin-bottom: -10px;
+}
+/* spacing between input textboxes */
+
+body {
+  background-color: #ffffff;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  width: 100%;
+  height: auto;
+}
+
+/* spacing between input textboxes */
+input[type=text] {
+  margin-bottom: -10px;
+}
+/* spacing between input textboxes */
+
+.social-media {
+  float: right;
+}
+
+.btn {
+  background-color: #003918;
+}
+
+.btn:hover {
+  background-color: #198c19;
+}
+/* addedd css codes by Laudit, Prime */
+
 div.top-header
 {
-    height: 50px; 
-    background-color: #006400;
+    height: 50px;
+    background-color: #016601; /* background-color changed from #003918 to #016601 by Delgado, Kendra */
 }
 
 div.row-space-100 {
-    height: 100px
+  height: 90px;
 }
 
 div.row-space-50 {
-    height: 50px
+    height: 50px;
 }
 
 div.row-space-25 {
     height: 25px
 }
 
-
 div.footer {
-    padding: 10px 10px 10px 20px ;
-    font-family: Verdana, Geneva, sans-serif;
-    font-size: 12px;
+    text-align: left; /* added css code by Laudit, Prime */
+    padding: 10px 10px 20px 20px;
+    font-family: "Verdana", Geneva, sans-serif;
+    font-size: 11px;
     font-style: italic;
-    background-color: #006400;
+    background-color: #016601; /* background-color changed from #003918 to #016601 by Delgado, Kendra*/
     color: white
 }
 
 div.footer  p  {
-    font-size: 10px;
+    font-size: 13px;
     font-style: normal;
 }
 
 div.footer  p  em {
-    font-size: 10px;
+    font-size: 13px;
     font-style: normal;
     font-weight: bold
 }
 
 div.form-panel {
-    box-shadow: 10px 10px 5px grey; 
-    padding: 15px; 
-    height: 120%; 
-    /*background-color: #FFF5EE;*/ 
+    box-shadow: 10px 10px 5px #747474; /* changed shadow color from grey to #747474 */
+    padding-bottom: 20px;
+    padding-top: 20px;
+    height: 100%;
+    background-color: #d0f0c0; /* background-color changed from #FFF5EE to #e5e5e5 by Delgado, Kendra */
     border-radius: 10px;
-    font-family: Tahoma, Geneva, sans-serif;
+    font-family: Arial, Helvetica, sans-serif; /*font-family changed from Tahoma, Geneva, sans-serif to Arial, Helvetica, sans-serif by Delgado, Kendra */
 }
 
 div.form-panel-left {
-    background-repeat: no-repeat; 
-    background-size: 70% 100%; 
+    background-repeat: no-repeat;
+    background-size: 70% 100%;
     background-position: center;
 }
 
 h3 > em#capitalize {
     text-transform: uppercase;
     font-style: normal
-} 
+}
 
 div#error-messages {
-    color:red; 
-    font-size:.8em;
-    font-family: Arial, Helvetica, sans-serif; 
+    color:red;
+    font-size:.10em;
+    font-family: Arial, Helvetica, sans-serif;
     font-style: italic;
 }
 
@@ -79,25 +126,25 @@ img.progressImageRight {
 }
 
 i.textBoxMessageAvailableMd {
-    display:none; 
-    color:green; 
-    padding: .5em; 
-    font-size:.7em; 
-    font-family: Arial, Helvetica, sans-serif; 
+    display:none;
+    color:green;
+    padding: .5em;
+    font-size:.7em;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 i.textBoxMessageNotAvailableMd {
-    display:none; 
-    color:red; 
-    padding: .5em; 
-    font-size:.7em; 
-    font-family: Arial, Helvetica, sans-serif; 
+    display:none;
+    color:red;
+    padding: .5em;
+    font-size:.7em;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 b.jQueryFormValidationMessage {
-    color:red; 
-    padding: 1em; 
-    font-size:.7em; 
+    color:red;
+    padding: 1em;
+    font-size:.7em;
     font-family: Arial, Helvetica, sans-serif;
 }
 
@@ -114,14 +161,14 @@ b.jQueryFormValidationMessage {
 }
 
 div > em#error-messages {
-    color:red; 
+    color:red;
     font-size:.8em;
-    font-family: Arial, Helvetica, sans-serif; 
+    font-family: Arial, Helvetica, sans-serif;
     font-style: italic;
 }
 
 input[type="radio"] {
-    margin-left: 5px;
+    margin-left: auto;
     background-color: #eee;
     height: 20px;
     width: 20px;
@@ -134,12 +181,12 @@ label#radio-label {
 }
 
 div#employee-input {
-    display:none; 
+    display:none;
 }
 
 
 div#guest-input {
-    display:none; 
+    display:none;
 }
 
 
@@ -175,7 +222,7 @@ div#guest-input {
 
 /* Add Animation */
 @-webkit-keyframes animatetop {
-    from {top:-300px; opacity:0} 
+    from {top:-300px; opacity:0}
     to {top:0; opacity:1}
 }
 
@@ -237,7 +284,7 @@ div#guest-input {
 /* for dropdown only - change the color of droodown */
 .navbar-custom .dropdown-menu {
     background-color: #96e296;
-}
+}		
 .navbar-custom .dropdown-item {
     color: #ffffff;
 }
