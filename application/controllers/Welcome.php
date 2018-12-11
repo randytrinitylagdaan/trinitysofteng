@@ -5,7 +5,7 @@ class Welcome extends CI_Controller {
 
 	/**
 	 * Index Page for this controller.
-	 *
+	 *sssss
 	 * Maps to the following URL
 	 * 		http://example.com/index.php/welcome
 	 *	- or -
