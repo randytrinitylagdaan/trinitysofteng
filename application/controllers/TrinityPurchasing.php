@@ -16,7 +16,8 @@ class trinityPurchasing extends MY_Controller {
 	 * DATE CREATED: July 15, 2018
      * DATE UPDATED: July 15, 2018
 	 */
-
+	
+	//function of this code is for the request form and for creating a request form
     function __construct() {
         parent::__construct();
 		$this->load->library('session');
@@ -80,7 +81,9 @@ class trinityPurchasing extends MY_Controller {
         $this->load->view('ASRS/request-uploaded-images-list', $results);
 		
 	}
-
+	//function of this code is for the request form and for creating a request form
+	
+	//this function is for deleting the upload files 
 	public function aSRSDeleteUploadedFiles() {
 
 		$get = $this->input->get();  
@@ -116,11 +119,14 @@ class trinityPurchasing extends MY_Controller {
 		
 		
 	}	
-
+	
+	
 	public function aSRSMyRequestList() {
         $this->load->view('ASRS/request-my-list');
 	}	
+	//this function is for deleting the upload files
 	
+	//this function is for request items 
 	
     public function aSRSRequestItems() {
 		$data['ID'] = $_POST["ID"];
@@ -137,7 +143,9 @@ class trinityPurchasing extends MY_Controller {
 		$data['itemsList'] = $recs;		
         $this->load->view('ASRS/request-items-list', $data);
     }
-
+	//this function is for request items 
+	
+	//this function is for the supplier information
     public function aSRSSupplierNames() {
 		$data['ID'] = $_POST["ID"];
 		$data['accessType'] = $_POST["accessType"];
@@ -163,7 +171,9 @@ class trinityPurchasing extends MY_Controller {
 
         $this->load->view('ASRS/request-supplier-names', $data);
     }
-
+	//this function is for the supplier information
+	
+	//this is for the bidding preparation
     public function aSRSBiddingPreparation() {
 		$data['ID'] = $_POST["ID"];
 		$data['accessType'] = $_POST["accessType"];
@@ -189,8 +199,9 @@ class trinityPurchasing extends MY_Controller {
 
         $this->load->view('ASRS/request-bidding-preparation', $data);
     }	
+	//this is for the bidding preparation
 	
-
+	//this function is to show PBACmembers records data
     public function showPBACMember() {
 		$data['ID'] = $_POST["ID"];
 		$data['accessType'] = $_POST["accessType"];
@@ -214,7 +225,9 @@ class trinityPurchasing extends MY_Controller {
 
         $this->load->view('ASRS/request-pbac-member', $data);
     }	
-
+	//this function is to show PBACmembers records data
+	
+	//function for the request list
 	
 	public function aSRSRequestList() {
 
@@ -280,9 +293,9 @@ class trinityPurchasing extends MY_Controller {
 		}
         $this->load->view('ASRS/request-list', $data);
 	}
+	//function for the request list 
 
-
-
+	//function for the request details
 
 	public function aSRSRequestDetails() {
 
@@ -301,7 +314,9 @@ class trinityPurchasing extends MY_Controller {
 		$data['unitReviewer'] = $details[0]->unitReviewer;
 		$data['returnedFrom'] = $details[0]->returnedFrom;
 
+	//function for the request details
 	
+	//function for the getting records data
 		$results1 = $this->_getRecordsData($rec = array('*'), 
 		$tables = array('triune_job_request_transaction_asrs_attachments'), 
 		$fieldName = array('requestNumber'), $where = array($data['ID']), 
@@ -375,7 +390,9 @@ class trinityPurchasing extends MY_Controller {
 		
 		$data['statusHistory'] = null;
 		
-
+		//function for the getting records data
+		
+		//this function is for request transaction asrs items
 
 			$itemsSelect = "triune_job_request_transaction_asrs_items.*";
 
@@ -408,9 +425,9 @@ class trinityPurchasing extends MY_Controller {
 				$data['statusHistory'] = $results1;
 			}
 
-
+		//this function is for request transaction asrs items
 			
-
+		//this function for the special instruction
 			$data['specialInstructions'] = null;
 			$results2 = $this->_getRecordsData($rec = array('*'), 
 			$tables = array('triune_job_request_transaction_asrs_special_instructions'), 
@@ -422,7 +439,9 @@ class trinityPurchasing extends MY_Controller {
 			if(!empty($results2)) {
 				$data['specialInstructions'] = $results2;
 			}
+			//this function for the special instruction
 			
+			//this function is for the request notes
 			$data['requestNotes'] = null;
 			$results3 = $this->_getRecordsData($rec = array('*'), 
 			$tables = array('triune_job_request_transaction_asrs_request_notes'), 
@@ -435,7 +454,9 @@ class trinityPurchasing extends MY_Controller {
 			if(!empty($results3)) {
 				$data['requestNotes'] = $results3;
 			}
-
+			//this function is for the request notes
+			
+			//this is for the item list
 			$data['itemsList'] = null;
 			$results4= $this->_getRecordsData($dataSelect = array('*'), 
 			$tables = array('triune_job_request_transaction_asrs_items'), 
@@ -448,7 +469,10 @@ class trinityPurchasing extends MY_Controller {
 			if(!empty($results4)) {
 				$data['itemsList'] = $results4;		
 			}
-
+			
+			//this is for the item list
+			
+			//this function is for the supplier record data
 			$data['supplierName'] = null;
 			$selectData = "triune_supplier.supplierName, triune_supplier.supplierAddress, triune_supplier.supplierTelNumber, triune_job_request_transaction_asrs_supplier.updatedBy, ";
 			$selectData = $selectData . "triune_supplier.supplierMobileNumber, triune_supplier.supplierEmailAddress, triune_supplier.supplierContactPerson, triune_job_request_transaction_asrs_supplier.supplierBidStatus";
@@ -464,7 +488,9 @@ class trinityPurchasing extends MY_Controller {
 			if(!empty($results5)) {
 				$data['supplierName'] = $results5;
 			}
-
+			//this function is for the supplier record data
+			
+			//this is for the actual budget amount 
 
 			$data['actualBudgetAmount'] = null;
 			$results6 = $this->_getRecordsData($rec = array('*'), 
@@ -476,7 +502,9 @@ class trinityPurchasing extends MY_Controller {
 			if(!empty($results6)) {
 				$data['actualBudgetAmount'] = $results6[0]->actualBudgetAmount;
 			}
-
+			//this is for the actual budget amount 
+			
+			//this function is for the request category
 			$data['requestCategory'] = null;
 			$data['requestCategoryType'] = null;
 			$results7 = $this->_getRecordsData($rec = array('*'), 
@@ -498,3 +526,4 @@ class trinityPurchasing extends MY_Controller {
 	}
 	
 }
+//this function is for the request category

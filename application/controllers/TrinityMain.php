@@ -22,7 +22,7 @@ class trinityMain extends MY_Controller {
 		$this->load->library('session');
     }//function __construct()
 
-
+	//this function you to view the main access control of the portal
 	public function mainView() {
 		header("Access-Control-Allow-Origin: *");
 		$data['title'] = "MAIN";
@@ -36,7 +36,9 @@ class trinityMain extends MY_Controller {
         $this->load->view('main/detail-area', $data);
 		$this->load->view('useraccount/footer', $data);
 	}
-
+	//this function you to view the main access control of the portal
+	
+	//this function is you to view the side menu of the portal
     public function sideMenu() {
 		ob_start();
         ob_end_clean();
@@ -65,7 +67,9 @@ class trinityMain extends MY_Controller {
         $this->load->view('main/side-menu', $data);
 
     }
-
+	//this function is you to view the side menu of the portal
+	
+	//this function is for the records data 
 	public function modalForm() {
 		
 		$data['sys'] = $this->_getRecordsData($selectData = array('*'), $tables = array('triune_sy_list'), 
@@ -91,6 +95,8 @@ class trinityMain extends MY_Controller {
         $this->load->view('main/modal-form', $data);
 	}
 	
+	
+	
 
 	public function setSessionTerm() {
 		$post = $this->input->post();  
@@ -110,3 +116,4 @@ class trinityMain extends MY_Controller {
 
 	}
 }
+//this function is for the records data 

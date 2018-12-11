@@ -13,7 +13,7 @@ DATE UPDATED: June 06, 2018
 }
 
 body{
-    font-family: Arial;
+    font-family: Times New Roman;
 }
 
 
@@ -37,7 +37,7 @@ body{
 }
 
 #sticky-sidebar-demo .sidebar__inner{
-    background-color: lightgray;
+    background-color: gray;
     padding: 2px;
     position: relative;
     transform: translate(0, 0);
@@ -64,7 +64,7 @@ div.separator {
 }
 
 .button {
-	background-color: darkgreen;
+	background-color: green;
 	border: none;
 	color: white;
 	padding: 5px 10px;
@@ -80,8 +80,8 @@ div.separator {
 .button:hover {
 	background-color: white;
 	border: none;
-	color: darkgreen;
-	padding: 5px 10px;
+	color: green;
+	padding: 10px 5px;
 	text-align: center;
 	text-decoration: none;
 	display: inline-block;
