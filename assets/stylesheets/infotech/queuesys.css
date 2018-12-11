@@ -3,13 +3,13 @@
     border: 1px solid rgb(225, 228, 35);
     box-sizing: border-box;
     border-radius: 10px;
-    font-family: Verdana, Geneva, sans-serif;
+    font-family: Arial, Tahoma, sans-serif;
     font-size: 1em;
-    background-color: gold;
+    background-color: #D4AF37;
     text-align: center;
     width: 100%;
     max-width: 100%;
-    color:darkgreen;
+    color:#013220;
     font-weight: bold;
     margin: 10px;
     box-shadow: 5px 5px yellow;
@@ -17,7 +17,7 @@
 
 .small-button:hover {
     background-color: rgb(15, 97, 15);
-    color:gold;
+    color:#D4AF37;
     box-shadow: 5px 5px  rgb(4, 54, 19);
     text-decoration: none
 }
@@ -28,8 +28,8 @@
     border: 2px solid #ccc;
     box-sizing: border-box;
     border-radius: 4px;
-    border: 1px solid #73AD21;
-    font-family: Verdana, Geneva, sans-serif;
+    border: 1px solid #71A510;
+    font-family: Arial, Tahoma, sans-serif;
     font-size: 1.2em;
     background-color: white;
     text-align: center;
@@ -41,13 +41,13 @@
     border: 5px solid rgb(224, 212, 35);
     box-sizing: border-box;
     border-radius: 10px;
-    font-family: Verdana, Geneva, sans-serif;
+    font-family: Arial, Tahoma, sans-serif;
     font-size: 5em;
     color: gold;
     text-align: center;
     width: 100%;
     max-width: 100%;
-    background-color:darkgreen;
+    background-color:#013220;
     font-weight: bold;
     margin: 10px;
 }
@@ -58,13 +58,13 @@
     border: 5px solid rgb(224, 212, 35);
     box-sizing: border-box;
     border-radius: 10px;
-    font-family: Verdana, Geneva, sans-serif;
+    font-family: Arial, Tahoma, sans-serif;
     font-size: 1em;
     color: gold;
     text-align: center;
     width: 100%;
     max-width: 100%;
-    background-color:darkgreen;
+    background-color:#013220;
     font-weight: bold;
     margin: 10px;
 }
@@ -74,13 +74,13 @@
     border: 5px solid rgb(225, 228, 35);
     box-sizing: border-box;
     border-radius: 10px;
-    font-family: Verdana, Geneva, sans-serif;
+    font-family: Arial, Tahoma, sans-serif;
     font-size: 3em;
-    background-color: gold;
+    background-color: #D4AF37;
     text-align: center;
     width: 100%;
     max-width: 100%;
-    color:darkgreen;
+    color:#013220;
     font-weight: bold;
     margin: 10px;
     box-shadow: 5px 5px yellow;
@@ -88,33 +88,33 @@
  
 .large-button:hover {
     background-color: rgb(15, 97, 15);
-    color:gold;
+    color:#D4AF37;
     box-shadow: 5px 5px  rgb(4, 54, 19);
     text-decoration: none
 }
 
 .large-label {
     padding: 5px;
-    font-family: Verdana, Geneva, sans-serif;
+    font-family: Arial, Tahoma, sans-serif;
     font-size: 1.5em;
-    background-color: gold;
+    background-color:#D4AF37 ;
     text-align: center;
     width: 100%;
     max-width: 100%;
-    color:darkgreen;
+    color:#D4AF37;
     font-weight: bold;
 }
 
 
 .medium-label {
     padding: 5px;
-    font-family: Verdana, Geneva, sans-serif;
+    font-family: Arial, Tahoma, sans-serif;
     font-size: 1em;
-    background-color: gold;
+    background-color: #D4AF37;
     text-align: center;
     width: 100%;
     max-width: 100%;
-    color:darkgreen;
+    color:#013220;
     font-weight: bold;
 }
 
@@ -123,13 +123,13 @@
     border: 5px solid rgb(225, 228, 35);
     box-sizing: border-box;
     border-radius: 10px;
-    font-family: Verdana, Geneva, sans-serif;
+    font-family: Arial, Tahoma, sans-serif;
     font-size: 3em;
-    background-color: gold;
+    background-color: #D4AF37;
     text-align: center;
     width: 100%;
     max-width: 100%;
-    color:darkgreen;
+    color:#013220;
     font-weight: bold;
     margin: 10px;
     box-shadow: 5px 5px yellow;
@@ -140,13 +140,13 @@
     border: 5px solid rgb(225, 228, 35);
     box-sizing: border-box;
     border-radius: 10px;
-    font-family: Verdana, Geneva, sans-serif;
+    font-family: Arial, Tahoma, sans-serif;
     font-size: 10em;
-    background-color: gold;
+    background-color: #D4AF37;
     text-align: center;
     width: 100%;
     max-width: 100%;
-    color:darkgreen;
+    color:#013220;
     font-weight: bold;
     margin: 10px;
     box-shadow: 5px 5px yellow;
@@ -159,7 +159,7 @@
     box-sizing: border-box;
     border-radius: 4px;
     border: 1px solid #73AD21;
-    font-family: Verdana, Geneva, sans-serif;
+    font-family: Arial, Tahoma, sans-serif;
     font-size: 1.2em;
     background-color: white;
     float: left;
@@ -174,7 +174,7 @@
     box-sizing: border-box;
     border-radius: 4px;
     border: 1px solid #73AD21;
-    font-family: Verdana, Geneva, sans-serif;
+    font-family: Arial, Tahoma, sans-serif;
     font-size: 1.2em;
     background-color: white;
     float: left;
@@ -189,7 +189,7 @@
     box-sizing: border-box;
     border-radius: 4px;
     border: 1px solid #73AD21;
-    font-family: Verdana, Geneva, sans-serif;
+    font-family: Arial, Tahoma, sans-serif;
     font-size: 1.2em;
     background-color: white;
     float: left;
@@ -203,7 +203,7 @@
     box-sizing: border-box;
     border-radius: 4px;
     border: 1px solid #73AD21;
-    font-family: Verdana, Geneva, sans-serif;
+    font-family: Arial, Tahoma, sans-serif;
     font-size: 1.2em;
     background-color: white;
     float: left;
@@ -218,7 +218,7 @@
     box-sizing: border-box;
     border-radius: 4px;
     border: 1px solid #73AD21;
-    font-family: Verdana, Geneva, sans-serif;
+    font-family: Arial, Tahoma, sans-serif;
     font-size: 5em;
     background-color: white;
     float: left;

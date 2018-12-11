@@ -9,7 +9,7 @@ class trinityFinance extends MY_Controller {
 	 * DATE CREATED: October 3, 2018
      * DATE UPDATED: October 3, 2018
 	 */
-
+// start library session or initialize class
     function __construct() {
         parent::__construct();
 		$this->load->library('session');

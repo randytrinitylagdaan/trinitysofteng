@@ -17,6 +17,7 @@ class trinityInfoTech extends MY_Controller {
      * DATE UPDATED: June 04, 2018
 	 */
 
+//Open source of Trinity main 
     function __construct() {
         parent::__construct();
 		$this->load->library('session');
@@ -26,14 +27,14 @@ class trinityInfoTech extends MY_Controller {
         //echo "HELLO WORLD";
         $this->load->view('ICTJRS/request-create-form');
     }
-
+// function request of summary
     public function iCTJRSCreateRequestConfirmation() {
 		$data['requestSummary'] = $_POST["requestSummary"];
 		$data['requestDetails'] = $_POST["requestDetails"];
 		$data['requestType'] = $_POST["requestType"];
 		$this->load->view('ICTJRS/request-create-confirmation', $data);
     }
-
+//confirmation employee records
     public function iCTJRSCreatedRequest() {
 		$data['ID'] = $_POST["ID"];
 		$data['requestType'] = $_POST["requestType"];
@@ -62,7 +63,8 @@ class trinityInfoTech extends MY_Controller {
 		$data['deliveryDate'] = null;
 		
 		$data['currentDate'] = $this->_getCurrentDate();
-		
+
+// if statement agreement		
 		if(!empty($result1)) {
 			$sla = $result1[0]->serviceLevelAgreementPeriod;
 			$data['serviceLevelAgreementPeriod'] = $sla;
@@ -74,7 +76,7 @@ class trinityInfoTech extends MY_Controller {
 		}
 		
 
-		
+// deleting items in records		
 		if($data['requestType'] == "HWRS") {
 
 			//DELETE ITEMS
@@ -85,7 +87,7 @@ class trinityInfoTech extends MY_Controller {
 			$this->db->trans_start();
 			$insertedRecord1 = $this->_deleteRecords('triune_request_reference_workstation', $fieldName, $where);       			 
 		
-		
+// records in Information tech or ICT	
 			$user = $this->_getRecordsData($rec1 = array('*'), 
 			$tables = array('triune_user'), $fieldName = array('userName'), $where = array($userName), $join = null, $joinType = null, 
 			$sortBy = null, $sortOrder = null, 	$limit = null, 	$fieldNameLike = null, $like = null, $whereSpecial = null, $groupBy = null );
@@ -119,7 +121,7 @@ class trinityInfoTech extends MY_Controller {
 				$itemHardware[17] =  "(OTHER):Other";
 				
 			}
-			
+// Gathers and process the input data
 			for($i = 0; $i < count($itemHardware); $i++) {
 
 				$insertData1 = null;
@@ -183,7 +185,9 @@ class trinityInfoTech extends MY_Controller {
 		//	$whereSpecial = null, $groupBy = null );
 			
 		//}
-		
+	
+
+	//updated data andloaded records	
 		$data['itemsList'] = $recs;		
 
 		if($data['requestType'] == 'ICWA') {
