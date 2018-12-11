@@ -5,16 +5,17 @@ class triuneMain extends MY_Controller {
 
 	/**
 	 * Index Page for this controller.
-	 *
+	 * 
 	 * Maps to the following URL
 	 * 		https://tua.edu.ph/triune/auth
 	 * Since this controller is set as the default controller in
 	 * config/routes.php, it's displayed at http://tua.edu.ph/triune
 	 *
 	 * AUTHOR: Randy D. Lagdaan
+	 * EDIT: Sidney Pascasio
 	 * DESCRIPTION: Main Controller. Included 
 	 * DATE CREATED: April 19, 2018
-     * DATE UPDATED: April 19, 2018
+     * DATE UPDATED: December 11, 2018
 	 */
 
     function __construct() {
