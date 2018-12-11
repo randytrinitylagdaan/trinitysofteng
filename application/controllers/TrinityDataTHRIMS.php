@@ -5,7 +5,7 @@ class trinityDataTHRIMS extends MY_Controller {
 
 	/**
 	 * Index Page for this controller.
-	 *
+	 *ss
 	 * Maps to the following URL
 	 * 		https://tua.edu.ph/triune/auth
 	 * Since this controller is set as the default controller in
