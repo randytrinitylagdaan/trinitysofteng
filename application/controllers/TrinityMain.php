@@ -12,7 +12,7 @@ class trinityMain extends MY_Controller {
 	 * config/routes.php, it's displayed at http://tua.edu.ph/triune
 	 *
 	 * AUTHOR: Randy D. Lagdaan
-	 * DESCRIPTION: Main Controller. Included 
+	 * DESCRIPTION: Main Controller. Included
 	 * DATE CREATED: June 03, 2018
      * DATE UPDATED: June 03, 2018
 	 */
@@ -45,11 +45,11 @@ class trinityMain extends MY_Controller {
         $groupSystemID = $this->input->get("groupSystemID");
         $flag = $this->input->get("flag");
         $group = explode("/",$groupSystemID);
-        
+
 		$data['system'] = null;
 		$data['module'] =  null;
 		$data['menu'] = null;
-		
+
 		if($flag == '0') {
 			$data['system'] = $this->_getUserPrivilegesDetails($userName, '-SYS', $group[0]);
 			$data['module'] = $this->_getUserPrivilegesDetails($userName, '-MDL', $group[0]);
@@ -59,47 +59,47 @@ class trinityMain extends MY_Controller {
 			$data['module'] = $this->_getUserPrivilegesDetails($userName, '-MDLSET', $group[0]);
 			$data['menu'] = $this->_getUserPrivilegesDetails($userName, '-MNUSET', $group[0]);
 		}
-		
+
 		$data['currentDate'] = $this->_getCurrentDate();
-		
+
         $this->load->view('main/side-menu', $data);
 
     }
 
 	public function modalForm() {
-		
-		$data['sys'] = $this->_getRecordsData($selectData = array('*'), $tables = array('triune_sy_list'), 
-			$fieldName = null, $where = null, 
-			$join = null, $joinType = null, $sortBy = null, $sortOrder = null, $limit = null, 
-			$fieldNameLike = null, $like = null, 
+
+		$data['sys'] = $this->_getRecordsData($selectData = array('*'), $tables = array('triune_sy_list'),
+			$fieldName = null, $where = null,
+			$join = null, $joinType = null, $sortBy = null, $sortOrder = null, $limit = null,
+			$fieldNameLike = null, $like = null,
 			$whereSpecial = null, $groupBy = null );
 
-		$data['sems'] = $this->_getRecordsData($selectData = array('*'), $tables = array('triune_sem_list'), 
-			$fieldName = null, $where = null, 
-			$join = null, $joinType = null, $sortBy = null, $sortOrder = null, $limit = null, 
-			$fieldNameLike = null, $like = null, 
+		$data['sems'] = $this->_getRecordsData($selectData = array('*'), $tables = array('triune_sem_list'),
+			$fieldName = null, $where = null,
+			$join = null, $joinType = null, $sortBy = null, $sortOrder = null, $limit = null,
+			$fieldNameLike = null, $like = null,
 			$whereSpecial = null, $groupBy = null );
 
-			
-		$data['gradingPeriods'] = $this->_getRecordsData($selectData = array('*'), $tables = array('triune_grading_periods'), 
-			$fieldName = null, $where = null, 
-			$join = null, $joinType = null, $sortBy = array('gradingPeriods'), $sortOrder = array('asc'), $limit = null, 
-			$fieldNameLike = null, $like = null, 
+
+		$data['gradingPeriods'] = $this->_getRecordsData($selectData = array('*'), $tables = array('triune_grading_periods'),
+			$fieldName = null, $where = null,
+			$join = null, $joinType = null, $sortBy = array('gradingPeriods'), $sortOrder = array('asc'), $limit = null,
+			$fieldNameLike = null, $like = null,
 			$whereSpecial = null, $groupBy = null );
-			
-			
+
+
         $this->load->view('main/modal-form', $data);
 	}
-	
+
 
 	public function setSessionTerm() {
-		$post = $this->input->post();  
+		$post = $this->input->post();
 		$clean = $this->security->xss_clean($post);
-		
+
 		$sY = isset($clean['sY']) ? $clean['sY'] : '';
 		$sem = isset($clean['sem']) ? $clean['sem'] : '';
 		$gP = isset($clean['gP']) ? $clean['gP'] : '';
-		
+
 		$this->session->set_userdata('sy', $sY);
 		$this->session->set_userdata('sem', $sem);
 		$this->session->set_userdata('gP', $gP);
