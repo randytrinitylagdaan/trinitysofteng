@@ -16,18 +16,20 @@ class trinityTHRIMS extends MY_Controller {
 	 * DATE CREATED: August 16, 2018
      * DATE UPDATED: August 16, 2018
 	 */
-
+	
+	//** The code redirects a user to view the library */
     function __construct() {
         parent::__construct();
 		$this->load->library('session');
     }//function __construct()
-
+	
+	//** The code redirects a user to view THRIMS the employee profile list */
     public function employeeProfileTHRIMS() {
         //echo "HELLO WORLD";
         $this->load->view('THRIMS/employee-profile-list');
     }
 
-
+	//** The code redirects a user to view THRIMS the employee profile details and can edit and post their id */
     public function showEmployeeProfileDetailsTHRIMS() {
         //echo "HELLO WORLD";
 		$ID = $_POST["ID"];
@@ -37,7 +39,8 @@ class trinityTHRIMS extends MY_Controller {
 			$sortBy = null, $sortOrder = null, $limit = null, 
 			$fieldNameLike = null, $like = null, 
 			$whereSpecial = null, $groupBy = null );
-			
+	
+	//** The code redirects a user to view the employee profile details and can edit their yearsInService, age, spouseAge, fatherAge, motherAge */
 		$data['rows'] = $results;	
 
 		$data['yearsInService'] = $this->_getYearsMonthsDays($results[0]->dateHired);
@@ -46,7 +49,8 @@ class trinityTHRIMS extends MY_Controller {
 		$data['fatherAge'] = $this->_getYearsMonthsDays($results[0]->fatherBirthDay);
 		$data['motherAge'] = $this->_getYearsMonthsDays($results[0]->motherBirthDay);
 		
-		
+	//** The code redirects a user to view the employee profile details and can edit and their jobTitleDescription,departmentDescription,jobStatusDescription,statusCategory,positionClass,startDate,
+	//* expiryDate,employeeStatusID*/
 		$selectField = "triune_employee_job_title.jobTitleDescription, triune_employee_department.departmentDescription, ";
 		$selectField = $selectField . "triune_employee_job_status.jobStatusDescription, triune_employee_job_status.statusCategory, triune_employee_position_class.positionClass, ";
 		$selectField = $selectField . "triune_employment_career.startDate, triune_employment_career.expiryDate, triune_employment_career.employeeStatusID";
@@ -68,12 +72,13 @@ class trinityTHRIMS extends MY_Controller {
     }
 	
 	
-
+	//** The code redirects a user to view the employee records setup list */
     public function showEmployeeRecordsTHRIMS() {
         //echo "HELLO WORLD";
         $this->load->view('THRIMS/reports-employee-records-setup-list');
     }
 	
+	//** The code redirects a user to view the report details and can edit and post report file name, employee number */
     public function showReportsDetailsTHRIMS() {
 		$reportFileName = $_POST["reportFileName"];
 		$employeeNumber = $_POST["employeeNumber"];
@@ -83,7 +88,8 @@ class trinityTHRIMS extends MY_Controller {
 			$sortBy = null, $sortOrder = null, $limit = null, 
 			$fieldNameLike = null, $like = null, 
 			$whereSpecial = null, $groupBy = null );
-			
+	
+	//** The code redirects a user to view the employee data and can edit their yearsInService,age,spouseAge,fatherAge,motherAge*/	
 		$data['rows'] = $results;	
 
 		$data['yearsInService'] = $this->_getYearsMonthsDays($results[0]->dateHired);
@@ -92,7 +98,8 @@ class trinityTHRIMS extends MY_Controller {
 		$data['fatherAge'] = $this->_getYearsMonthsDays($results[0]->fatherBirthDay);
 		$data['motherAge'] = $this->_getYearsMonthsDays($results[0]->motherBirthDay);
 		
-		
+	//** The code redirects a user to view the employee data and can edit and post their jobTitleDescription,departmentDescription,jobStatusDescription,statusCategory,positionClass,startDate,
+	//* expiryDate,employeeStatusID*/	
 		$selectField = "triune_employee_job_title.jobTitleDescription, triune_employee_department.departmentDescription, ";
 		$selectField = $selectField . "triune_employee_job_status.jobStatusDescription, triune_employee_job_status.statusCategory, triune_employee_position_class.positionClass, ";
 		$selectField = $selectField . "triune_employment_career.startDate, triune_employment_career.expiryDate, triune_employment_career.employeeStatusID";
@@ -105,7 +112,8 @@ class trinityTHRIMS extends MY_Controller {
 			$sortBy = null, $sortOrder = null, $limit = null, 
 			$fieldNameLike = null, $like = null, 
 			$whereSpecial = null, $groupBy = null );
-			
+	
+	//** The code redirects a user to view the THRIMS can edit their jobTitleDescription,gender,id,jobStatusDescription,departmentDescription,*/	
 		$data['rowsCareer'] = $resultsCareer;	
 
 		$data['jobTitleDescription'] = $resultsCareer[0]->jobTitleDescription;
@@ -114,6 +122,7 @@ class trinityTHRIMS extends MY_Controller {
 		$data['jobStatusDescription'] = $resultsCareer[0]->jobStatusDescription;		
 		$data['departmentDescription'] = $resultsCareer[0]->departmentDescription;
 
+	//** The code redirects a user to view the THRIMS can edit their lastName,firstName,middleName,positionClass,tuaEmailAddress,civilStatus,emailAddress,datehired,mobileNumber,telephoneNumber,employeeNumber,reportFileName*/
 		$data['lastName'] = $results[0]->lastName; 
 		$data['firstName'] = $results[0]->firstName;
 		$data['middleName'] = $results[0]->middleName;
@@ -132,7 +141,7 @@ class trinityTHRIMS extends MY_Controller {
         $this->load->view('THRIMS/' . $reportFileName, $data);
 
     }
-
+	//** The code redirects a user to view the references gender */
     public function showGenderTHRIMS() {
         //echo "HELLO WORLD";
         $this->load->view('THRIMS/references-gender');

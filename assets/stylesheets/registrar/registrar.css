@@ -85,8 +85,8 @@ DATE UPDATED: June 05, 2018
     border: 2px solid #ccc;
     box-sizing: border-box;
     border-radius: 4px;
-    background-color: #f8f8f8;
-    font-family: Verdana, Geneva, sans-serif;
+    background-color: #66b055;
+    font-family: Tahoma, Geneva, sans-serif;
     font-size: 1.2em;
     font-weight: bold;
 }
@@ -98,9 +98,9 @@ textarea.confirmation {
     box-sizing: border-box;
     border: 2px solid #ccc;
     border-radius: 4px;
-    background-color: #f8f8f8;
+    background-color: #66b055;
     resize: none;
-    font-family: Verdana, Geneva, sans-serif;
+    font-family: Tahoma, Geneva, sans-serif;
     font-size: 1.2em;
     font-weight: bold;
     
@@ -139,9 +139,9 @@ textarea.autoExpand {
     box-sizing: border-box;
     border-radius: 4px;
     border: 1px solid #73AD21;
-    font-family: Verdana, Geneva, sans-serif;
+    font-family: Tahoma, Geneva, sans-serif;
     font-size: 1.2em;
-    background-color: darkgreen;
+    background-color: #00FF00;
     color: white;
 
 }
@@ -203,12 +203,12 @@ textarea.autoExpand {
 
 
 .row-header {
-    font-family: Verdana, Geneva, sans-serif;
+    font-family: Tahoma, Geneva, sans-serif;
     background-color: white;
     padding: 2px;
 }
 .row-details {
-    font-family: Verdana, Geneva, sans-serif;
+    font-family: Tahoma, Geneva, sans-serif;
     background-color: white;
     padding: 2px;
 
@@ -217,10 +217,10 @@ textarea.autoExpand {
 .panel-group {
     overflow: hidden;
     font-size: 12px;
-    font-family: Verdana, Geneva, sans-serif;
+    font-family: Tahoma, Geneva, sans-serif;
     background-color: white;
     color: black;
-    border: 2px solid darkgreen;
+    border: 2px solid #00FF00;
     padding: 5px;
 }
 
@@ -243,7 +243,7 @@ textarea.autoExpand {
 
 
 input#autocomplete { 
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 1.02em; 
+    font-family: "", Helvetica, Arial, sans-serif; font-size: 1.02em; 
     border-radius: 0 !important;
 }
 
@@ -333,7 +333,7 @@ div.materials-estimate {
   
   
 body {
-  font-family: Verdana, sans-serif;
+  font-family: Tahoma, Geneva, sans-serif;
   margin: 0;
 }
 
@@ -478,7 +478,7 @@ img.hover-shadow {
 /* Style the tab */
 .tab {
     overflow: hidden;
-    border: 1px solid #ccc;
+    border: 1px solid #7cae69;
     background-color: #f1f1f1;
 }
 
@@ -501,7 +501,7 @@ img.hover-shadow {
 
 /* Create an active/current tablink class */
 .tab button.active {
-    background-color: #ccc;
+    background-color: #7cae69;
 }
 
 /* Style the tab content */
@@ -516,6 +516,6 @@ img.hover-shadow {
 .tabcontentEstimates {
     display: none;
     padding: 6px 12px;
-    border: 1px solid #ccc;
+    border: 1px solid #7cae69;
     border-top: none;
 }
